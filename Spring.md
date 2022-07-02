@@ -839,3 +839,71 @@ public class MyAop {
 
 ## SpringMVC
 
+- 导入依赖
+
+```xml
+<!-- https://mvnrepository.com/artifact/org.springframework/spring-webmvc -->
+<dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-webmvc</artifactId>
+    <version>5.3.21</version>
+</dependency>
+
+<!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
+<dependency>
+    <groupId>javax.servlet</groupId>
+    <artifactId>javax.servlet-api</artifactId>
+    <version>3.1.0</version>
+    <scope>provided</scope>
+</dependency>
+```
+
+- UserController类
+
+```java
+@Controller
+public class UserController {
+
+    @RequestMapping("/save")
+    @ResponseBody
+    public String save(){
+        System.out.println("user save ....");
+        return "{'flag':'true'}";
+    }
+}
+```
+
+- 新建springMvcConfig类
+
+```java
+@Configuration
+@ComponentScan("controller")
+public class SpringMvcConfig {
+}
+```
+
+- 设置springMvc配置
+
+```java
+public class ServletContainerslnitConfig extends AbstractDispatcherServletInitializer {
+    @Override
+    protected WebApplicationContext createServletApplicationContext() {
+        //加载springmvc配置
+        AnnotationConfigWebApplicationContext ctx = new AnnotationConfigWebApplicationContext();
+        ctx.register(SpringMvcConfig.class);
+        return null;
+    }
+
+    @Override
+    protected String[] getServletMappings() {
+        //设置哪些请求归属springmvc处理
+        return new String[]{"/"};
+    }
+
+    @Override
+    protected WebApplicationContext createRootApplicationContext() {
+        //加载spring配置
+        return null;
+    }
+}
+```
