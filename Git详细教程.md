@@ -4,7 +4,7 @@
 
 - ### 下载git
 
-
+[Git (git-scm.com)](https://git-scm.com/)
 
 - ### 设置个用户名和邮箱[一次即可]
 
@@ -41,6 +41,8 @@ git reset --hard [版本号]	//返回历史版本
 ```xml
 git branch [分支名]	//创建分支
 git branch -v	//查看分支
+git branch -d [分支名]	//删除本地分支
+git branch -b [分支名] [远程地址]	//克隆指定分支
 git checkout [分支名]	//切换分支
 git merge [分支名]	//合并分支，把输入的分支合并到当前分支
 ```
