@@ -891,7 +891,7 @@ public class ServletContainerslnitConfig extends AbstractDispatcherServletInitia
         //加载springmvc配置
         AnnotationConfigWebApplicationContext ctx = new AnnotationConfigWebApplicationContext();
         ctx.register(SpringMvcConfig.class);
-        return null;
+        return ctx;
     }
 
     @Override

@@ -119,3 +119,17 @@ target
 ## GitLab
 
 https://www.bilibili.com/video/BV1vy4y1s7k6?p=41&t=320.3
+
+## 实例教程
+
+### 拉取远程仓库并且推送
+
+```xml
+git init //初始化
+git pull https://gitee.com/sky6600/noteRep.git 你的分支名  //拉取远程仓库
+git add .   //添加暂存区
+git commit -m "xxxx"   //提交到本地仓库
+git branch "你的分支名"   //创建你的分支
+git push https://gitee.com/sky6600/noteRep.git 你的分支名 //推送你的分支到远程对应分支
+```
+
