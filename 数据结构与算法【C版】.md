@@ -1,6 +1,6 @@
 # 数据结构&算法【C版】
 
-## 数据结构
+# 数据结构
 
 - **概念**
 
@@ -10,7 +10,7 @@
 
 <img src="数据结构与算法【C版】.assets/image-20220706212717367.png" alt="image-20220706212717367" style="zoom:50%;" />
 
-### 时间复杂度和空间复杂度
+## 时间复杂度和空间复杂度
 
 > **时间复杂度是指执行算法所需要的计算工作量；而空间复杂度是指执行这个算法所需要的内存空间**
 >
@@ -60,6 +60,8 @@ int a[n];
 > 如果随着输入值 n 的增大，程序申请的临时空间成 n^2 关系增长，则程序的空间复杂度用 O(n^2) 表示；
 > 如果随着输入值 n 的增大，程序申请的临时空间成 n^3 关系增长，则程序的空间复杂度用 O(n^3) 表示；
 
+## 线性表
+
 ### 顺序存储
 
 - **基本操作**
@@ -96,7 +98,7 @@ int a[n];
 
   - (4)自由区中的存储空间不能被其它数据占用(共享)。
 
-> 数组实现
+#### 数组实现
 
 ```c
 
@@ -156,7 +158,7 @@ int main() {
 }
 ```
 
-> 结构体静态实现
+> #### 结构体静态实现
 
 ```c
 #include<stdio.h>
@@ -207,7 +209,7 @@ int main() {
  }
 ```
 
-> 结构体动态实现
+> #### 结构体动态实现
 
 ```c
 #include<stdio.h>
@@ -268,3 +270,131 @@ int main() {
 ```
 
 ### 链式存储
+
+> #### 单链表
+
+```c
+#include<stdio.h>
+#include <malloc.h>
+
+typedef struct linkednode {
+	int data;
+	struct linkednode* next;
+}snode,*ptr;
+
+//有序插入
+void InsertByOrder(snode* head,int e) {
+	ptr q, p;
+	q = head;
+	p = head->next;
+	while (p && e>p->data)
+	{
+		q = p;
+		p = p->next;
+	}
+	ptr f;
+	f =(ptr) malloc(sizeof(snode));//分配要插入的node的空间
+	f->data = e;//装配数据
+	f->next = p;
+	q->next = f;
+}
+
+//在末尾插入元素
+void InsertAtTheEnd(snode** last, int e) {//ptr* last重点，形参无法改变实参
+	ptr p;
+	p = (ptr)malloc(sizeof(snode));
+	p->data = e;
+	(*last)->next = p;
+	(*last) = p;
+	(*last)->next = NULL;
+}
+
+//在特定位置插入元素
+int InsertAtLocation(snode* head, int i, int e) {
+	ptr p;
+	p = head;
+	for (int j = 0; j < i - 1; j++) {
+		if (p != NULL)
+			p = p->next;
+		else
+			break;
+	}
+	if (i < 1 || p == NULL) return -1;//判断插入点是否错误
+	ptr f;
+	f = (ptr)malloc(sizeof(snode));
+	f->data = e;
+	f->next = p->next;
+	p->next = f;
+	return 1;
+}
+
+//删除特定位置的元素
+int DeleteAtLocation(snode* head, int e) {
+	ptr q, p;
+	q = head;
+	p = head->next;
+	while (p && p->data!=e)//查找元素为e的节点
+	{
+		q = p;
+		p = p->next;
+	}
+	if (p != NULL) {//判断要删除的节点是否存在
+		q->next = p->next;
+		free(p); //释放p
+		return 1;
+	}
+	else
+	{
+		return -1;
+	}
+}
+
+//初始化链表
+void InitList(snode* head,snode* last) {
+	ptr p;
+	int x;
+	scanf("%d", &x);
+	while (x != 0)
+	{
+		p = (ptr)malloc(sizeof(snode));//分配节点内存
+		p->data = x;//装入节点数据
+		last->next = p;
+		last = p;
+		scanf("%d", &x);
+	}
+	last->next = NULL;//尾结点next置为空指针
+}
+
+//输出链表
+void ListAll(snode* head) {
+	ptr p = head;
+	while (true)
+	{
+		if (p->next == NULL) return;
+		else
+		{
+			printf("%d\n", p->next->data);
+			p = p->next;
+		}
+	}
+}
+
+int main() {
+	ptr head,last;
+	head = (ptr)malloc(sizeof(snode));//分配表头内存
+	head->next = NULL;//设为空表
+	last = head;
+
+	InsertAtTheEnd(&last, 99);
+	InsertAtTheEnd(&last, 959);
+	InsertAtTheEnd(&last, 979);
+	InsertAtTheEnd(&last, 999);
+	InsertByOrder(head, 888);
+	InsertAtLocation(head, 6, 3333);
+	DeleteAtLocation(head, 99);
+
+	ListAll(head);
+}
+```
+
+> 循环链表
