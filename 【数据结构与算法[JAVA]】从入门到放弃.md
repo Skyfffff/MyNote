@@ -146,7 +146,7 @@ Process finished with exit code 0
 
 ​													                                       **单链表的内存原理**
 
-![image-20220403164725658](数据结构与算法.assets/image-20220403164725658.png)
+![image-20220403164725658](PictureFile/数据结构与算法.assets/image-20220403164725658.png)
 
 
 
@@ -510,7 +510,7 @@ public class DoubleLinkList {
 
 ​																							**出栈&入栈示意图**
 
-![image-20220406215603387](数据结构与算法.assets/image-20220406215603387.png)
+![image-20220406215603387](PictureFile/数据结构与算法.assets/image-20220406215603387.png)
 
 ------
 
@@ -632,7 +632,7 @@ public class ArrayStack {
 >
 > 流程如下：（中缀表达式实现复杂，省略）
 
-![image-20220407084620000](数据结构与算法.assets/image-20220407084620000.png)
+![image-20220407084620000](PictureFile/数据结构与算法.assets/image-20220407084620000.png)
 
 ### 递归
 
@@ -666,7 +666,7 @@ public class ArrayStack {
 
 ------
 
-![image-20220614082802915](数据结构与算法.assets/image-20220614082802915.png)
+![image-20220614082802915](PictureFile/数据结构与算法.assets/image-20220614082802915.png)
 
 - **代码实现**
 
@@ -836,12 +836,12 @@ class EmpLinkedList {
 >
 >  二叉树的子节点分为左节点和右节点。
 
-![image-20220614174208503](数据结构与算法.assets/image-20220614174208503.png)
+![image-20220614174208503](PictureFile/数据结构与算法.assets/image-20220614174208503.png)
 
 -  **示意图** 
 
 ------
 
-![image-20220614173642464](数据结构与算法.assets/image-20220614173642464.png)
+![image-20220614173642464](PictureFile/数据结构与算法.assets/image-20220614173642464.png)
 
 ## 算法

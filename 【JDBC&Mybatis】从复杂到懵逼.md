@@ -432,7 +432,7 @@ public class MybatisDemo {
 
 ***模块结构如图所示***
 
-![img](【JDBC&Mybatis】从复杂到懵逼.assets/20220423145103.png)
+![img](PictureFile/【JDBC&Mybatis】从复杂到懵逼.assets/20220423145103.png)
 
 > **Test部分主要代码**
 

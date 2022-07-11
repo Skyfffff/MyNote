@@ -21,9 +21,9 @@ git init
 
 - ### 过程图
 
-![image-20220624173028309](Git详细教程.assets/image-20220624173028309.png)
+![image-20220624173028309](PictureFile/Git详细教程.assets/image-20220624173028309.png)
 
-![image-20220624223439309](Git详细教程.assets/image-20220624223439309.png)
+![image-20220624223439309](PictureFile/Git详细教程.assets/image-20220624223439309.png)
 
 - ### 基本命令
 
