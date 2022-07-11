@@ -350,7 +350,7 @@ int DeleteAtLocation(snode* head, int e) {
 }
 
 //初始化链表
-void InitList(snode* head,snode* last) {
+void InitList(snode* head,snode** last) {
 	ptr p;
 	int x;
 	scanf("%d", &x);
@@ -358,8 +358,8 @@ void InitList(snode* head,snode* last) {
 	{
 		p = (ptr)malloc(sizeof(snode));//分配节点内存
 		p->data = x;//装入节点数据
-		last->next = p;
-		last = p;
+		（*last）->next = p;
+		（*last） = p;
 		scanf("%d", &x);
 	}
 	last->next = NULL;//尾结点next置为空指针
@@ -397,4 +397,18 @@ int main() {
 }
 ```
 
-> 循环链表
+> #### 循环链表
+
+<img src="数据结构与算法【C版】.assets/image-20220709094830070.png" alt="image-20220709094830070"  />
+
+![image-20220709094930271](数据结构与算法【C版】.assets/image-20220709094930271.png)
+
+
+
+> #### 双向链表
+
+![image-20220709095653006](数据结构与算法【C版】.assets/image-20220709095653006.png)
+
+> #### 双向循环链表
+
+![image-20220709095732066](数据结构与算法【C版】.assets/image-20220709095732066.png)
