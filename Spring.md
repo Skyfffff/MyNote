@@ -125,9 +125,7 @@ public void setBookDao(BookDao bookDao) {
 
 - **其他**
 
-------
-
-![image-20220613193314859](D:\Sourcecode\笔记\笔记图片\image-20220613193314859.png)
+> [(46条消息) bean标签的常用属性_lzgsea的博客-CSDN博客_bean标签](https://blog.csdn.net/lzgsea/article/details/79795290)
 
 **适合交给容器进行管理的bean**
 
