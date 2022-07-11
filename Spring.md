@@ -1529,5 +1529,69 @@ public class SpringMvcConfig {
 
 ### 入门案例
 
+> 在controller目录下新建intercept目录，在其中创建ProJectInterceptor类作为拦截器
 
+- **ProJectInterceptor类**
+
+```java
+import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+@Component
+public class ProJectInterceptor implements HandlerInterceptor {
+    @Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        System.out.println("拦截前的操作......");
+        return true;
+    }
+
+    @Override
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+        System.out.println("拦截后的操作......");
+    }
+
+    @Override
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+        System.out.println("完成后的操作......");
+    }
+}
+```
+
+- **SpringMvcRelease配置**
+
+```java
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
+import skyblog.top.springmvc.controller.interceptor.ProJectInterceptor;
+
+@Configuration
+public class SpringMvcRelease extends WebMvcConfigurationSupport {
+    @Autowired
+    private ProJectInterceptor jectInterceptor;
+    @Override
+    protected void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/pages/**").addResourceLocations("/pages/");
+    }
+
+    @Override
+    protected void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(jectInterceptor).addPathPatterns("/users/*");
+    }
+}
+```
+
+### 拦截器的参数
+
+> 略......
+
+### 拦截器链的配置
+
+> https://www.bilibili.com/video/BV1Fi4y1S7ix?p=74&t=429.5
 
