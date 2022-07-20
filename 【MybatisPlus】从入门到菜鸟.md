@@ -23,7 +23,7 @@
 
 ## 框架结构
 
-![framework](【MybatisPlus】从入门到菜鸟.assets/mybatis-plus-framework.jpg)
+![framework](PictureFile/【MybatisPlus】从入门到菜鸟.assets/mybatis-plus-framework.jpg)
 
 ## 入门案例
 
