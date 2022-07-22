@@ -98,6 +98,8 @@ class ApplicationTests {
 
 ##   查询
 
+[条件构造器 | MyBatis-Plus (baomidou.com)](https://baomidou.com/pages/10c804/#abstractwrapper)
+
 ### 分页查询
 
 - #### 添加Page拦截器
@@ -158,12 +160,10 @@ class ApplicationTests {
 数据：[User{id=1, username='UpdateTest', password='123456'}, User{id=4, username='people2', password='123'}]
 ```
 
-### 条件查询
+### 等匹配查询
 
 ```java
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -176,20 +176,299 @@ class ApplicationTests {
 
     @Test
     void getByPage(){
-        //方式一：普通格式
-//        QueryWrapper<User> qw = new QueryWrapper<>();
-//        qw.lt("id",10);//查询id小于10的
-//        System.out.println(userDao.selectList(qw));
-
-        //方式二：Lambda格式
-//        QueryWrapper<User> qw = new QueryWrapper<>();
-//        qw.lambda().lt(User::getId,10);
-//        System.out.println(userDao.selectList(qw));
-        
-        //方式三：直接用Lambda条件查询类
+        //匹配用户名和密码
         LambdaQueryWrapper<User> lqw = new LambdaQueryWrapper<>();
-        lqw.lt(User::getId,10);
+        lqw.eq(User::getUsername,"sky666").eq(User::getPassword,"123456");
+        System.out.println(userDao.selectOne(lqw));
+    }
+}
+```
+
+### 范围查询
+
+```java
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import skyblog.dao.UserDao;
+import skyblog.domain.User;
+@SpringBootTest
+class ApplicationTests {
+    @Autowired
+    private UserDao userDao;
+
+    @Test
+    void getByPage(){
+        //范围查询
+        LambdaQueryWrapper<User> lqw = new LambdaQueryWrapper<>();
+        lqw.between(User::getId,2,10);
         System.out.println(userDao.selectList(lqw));
     }
 }
 ```
+
+### 模糊查询
+
+```java
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import skyblog.dao.UserDao;
+import skyblog.domain.User;
+@SpringBootTest
+class ApplicationTests {
+    @Autowired
+    private UserDao userDao;
+
+    @Test
+    void getByPage(){
+        //模糊查询
+        LambdaQueryWrapper<User> lqw = new LambdaQueryWrapper<>();
+        lqw.like(User::getUsername,"sky");
+        System.out.println(userDao.selectList(lqw));
+    }
+}
+```
+
+## 删除
+
+### 普通删除
+
+```java
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import skyblog.dao.UserDao;
+import java.util.ArrayList;
+
+@SpringBootTest
+class ApplicationTests {
+    @Autowired
+    private UserDao userDao;
+
+    @Test
+    void getByPage(){
+        ArrayList<Long> longs = new ArrayList<>();
+        longs.add(1550033459488088066L);
+        longs.add(1550034549189177346L);
+        userDao.deleteBatchIds(longs);//多项删除
+    }
+}
+```
+
+### 逻辑删除
+
+- #### 添加逻辑删除字段
+
+> 通过写yml配置文件亦可
+
+```java
+@TableName("users")
+public class User {
+    @TableId(type = IdType.ASSIGN_ID)
+    private Long id;
+    private String username;
+    private String password;
+    @TableLogic(value = "0",delval = "1")//设置逻辑删除字段
+    private Integer deleted;
+}
+```
+
+- #### 测试
+
+```java
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import skyblog.dao.UserDao;
+
+@SpringBootTest
+class ApplicationTests {
+    @Autowired
+    private UserDao userDao;
+
+    @Test
+    void getByPage(){
+        userDao.deleteById(1);
+    }
+}
+```
+
+- #### 结果
+
+```xml
+==>  Preparing: UPDATE users SET deleted=1 WHERE id=? AND deleted=0
+==> Parameters: 1(Integer)
+<==    Updates: 1
+```
+
+## 映射
+
+<img src="PictureFile/【MybatisPlus】从入门到菜鸟.assets/image-20220721151704599.png" alt="image-20220721151704599" style="zoom:80%;" />
+
+### 字段映射
+
+```java
+@TableName("users")//表名映射
+public class User {
+    private Integer id;
+    private String username;
+    @TableField(value = "password",select = false)//字段映射，不参与查询
+    private String password;
+    @TableField(exist = false)//设置为不存在
+    private String Online;
+    }
+```
+
+### 表名映射
+
+> **@TableName("users")//表名映射**
+
+## ID生成策略
+
+- #### domain中做配置
+
+```java
+@TableName("users")
+public class User {
+    @TableId(type = IdType.ASSIGN_ID)//雪花算法
+    private Long id;
+    private String username;
+    private String password;
+    }
+```
+
+- #### 测试
+
+```java
+mport org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import skyblog.dao.UserDao;
+import skyblog.domain.User;
+@SpringBootTest
+class ApplicationTests {
+    @Autowired
+    private UserDao userDao;
+
+    @Test
+    void getByPage(){
+        User user = new User(null,"sky","555555");
+        userDao.insert(user);
+    }
+}
+```
+
+- #### 结果
+
+```xml
+==> Preparing: INSERT INTO users ( id, username, password ) VALUES ( ?, ?, ? )
+==> Parameters: 1550034549189177346(Long), sky(String), 555555(String)
+```
+
+## 锁
+
+### 乐观锁
+
+- #### 添加乐观锁字段
+
+```java
+@TableName("users")
+public class User {
+    @TableId(type = IdType.ASSIGN_ID)
+    private Long id;
+    private String username;
+    private String password;
+    @TableLogic(value = "0",delval = "1")
+    private Integer deleted;
+    @Version//乐观锁字段
+    private Integer version;
+}
+```
+
+- #### 添加拦截器
+
+```java
+import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
+import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInterceptor;
+import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class MpConfig {
+    @Bean
+    public MybatisPlusInterceptor mybatisPlusInterceptor(){
+        //定义Mp拦截器
+        MybatisPlusInterceptor mybatisPlusInterceptor = new MybatisPlusInterceptor();
+        //拦截器里面添加Page拦截器
+        mybatisPlusInterceptor.addInnerInterceptor(new PaginationInnerInterceptor());
+        //添加乐观锁拦截器
+        mybatisPlusInterceptor.addInnerInterceptor(new OptimisticLockerInnerInterceptor());
+        return  mybatisPlusInterceptor;
+    }
+}
+```
+
+- #### 测试
+
+```java
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import skyblog.dao.UserDao;
+import skyblog.domain.User;
+
+@SpringBootTest
+class ApplicationTests {
+    @Autowired
+    private UserDao userDao;
+
+    @Test
+    void getByPage(){
+        //模拟两个用户同时访问同一个数据
+        User user1 = userDao.selectById(4);
+        User user2 = userDao.selectById(4);
+
+        user1.setUsername("user1");
+        userDao.updateById(user1);
+
+        user2.setUsername("user2");
+        userDao.updateById(user2);
+    }
+}
+```
+
+- #### 结果
+
+```xml
+==>  Preparing: SELECT id,username,password,deleted,version FROM users WHERE id=? AND deleted=0
+==> Parameters: 4(Integer)
+<==    Columns: id, username, password, deleted, version
+<==        Row: 4, people2, 123, 0, 1
+<==      Total: 1
+
+==>  Preparing: SELECT id,username,password,deleted,version FROM users WHERE id=? AND deleted=0
+==> Parameters: 4(Integer)
+<==    Columns: id, username, password, deleted, version
+<==        Row: 4, people2, 123, 0, 1
+<==      Total: 1
+
+==>  Preparing: UPDATE users SET username=?, password=?, version=? WHERE id=? AND version=? AND deleted=0
+==> Parameters: user1(String), 123(String), 2(Integer), 4(Long), 1(Integer)
+<==    Updates: 1
+
+==>  Preparing: UPDATE users SET username=?, password=?, version=? WHERE id=? AND version=? AND deleted=0
+==> Parameters: user2(String), 123(String), 2(Integer), 4(Long), 1(Integer)
+<==    Updates: 0
+```
+
+- #### 原理解释
+
+> 当两个用户同时访问同一个数据时，只有第一个用户能够修改成功，因为当第二个用户访问时。version的值已经发生改变，所以修改操作无法找到相应的数据，导致修改失败。
+
+## 代码生成器
+
+https://www.bilibili.com/video/BV12T4y1B7C3?p=14&t=846.1
