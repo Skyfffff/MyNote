@@ -18,7 +18,7 @@
 
 #### 擅长语言：Java、C
 
-#### 拥有的技术栈：Spring、Mybatis、Servlet、Jsp、Html、CSS、JS、Vue、Ajax
+#### 拥有的技术栈：SSM、Mybatis-P、Mysql、Servlet、Jsp、Html、CSS、JS、Vue、Ajax
 
 #### 博客：http://skyblog.top/
 
