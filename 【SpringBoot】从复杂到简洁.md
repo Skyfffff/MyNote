@@ -205,7 +205,9 @@ spring:
 
 ## SpringBoot基本开发
 
-### Dao层
+### 数据层标准开发
+
+> Mybatis-Plus开发
 
 ```java
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -217,7 +219,7 @@ public interface UserDao extends BaseMapper<User> {
 }
 ```
 
-### Service层
+### 业务层标准开发
 
 - #### 接口
 
@@ -277,7 +279,7 @@ public class UserServiceImpl implements UserService {
 }
 ```
 
-### MP拦截器
+- #### MP分页拦截器
 
 ```java
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
@@ -296,7 +298,8 @@ public class MpConfig {
 }
 ```
 
-### 测试
+- #### 测试
+
 
 ```java
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -327,3 +330,91 @@ class ApplicationTests {
     }
 }
 ```
+
+### 业务层快速开发
+
+- #### 接口
+
+> 继承IService接口
+
+```java
+import com.baomidou.mybatisplus.extension.service.IService;
+import skyblog.domain.User;
+
+public interface UserServiceQuick extends IService<User> {
+}
+```
+
+- #### 实现类
+
+> 继承ServiceImpl实现类
+
+```java
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.stereotype.Service;
+import skyblog.dao.UserDao;
+import skyblog.domain.User;
+
+@Service
+public class UserServiceQuickImpl extends ServiceImpl<UserDao, User> {
+}
+```
+
+- #### 测试
+
+> 记得配置MP拦截器
+
+```java
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import skyblog.domain.User;
+import skyblog.service.Impl.UserServiceQuickImpl;
+
+@SpringBootTest()
+class ApplicationTests {
+    @Autowired
+    private UserServiceQuickImpl userServiceQuick;
+
+    @Test
+    void selectById() {
+        System.out.println(userServiceQuick.getById(4L));
+    }
+
+    @Test
+    void getPage() {
+        Page<User> page = new Page<>(1, 5);
+        userServiceQuick.page(page);
+        System.out.println("当前页码：" + page.getCurrent());
+        System.out.println("每页显示的数目：" + page.getSize());
+        System.out.println("一共有多少页：" + page.getPages());
+        System.out.println("一个有多少条数据：" + page.getTotal());
+        System.out.println("数据：" + page.getRecords());
+    }
+}
+```
+
+### 表现层标准开发
+
+```java
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import skyblog.domain.User;
+import skyblog.service.Impl.UserServiceImpl;
+
+@RestController
+@RequestMapping("/users")
+public class UserController {
+    @Autowired
+    private UserServiceImpl userService;
+    @GetMapping("/{id}")
+    public User getById(@PathVariable Long id){
+        return userService.selectById(id);
+    }
+}
+```
+
