@@ -418,3 +418,91 @@ public class UserController {
 }
 ```
 
+### 表现层数据一致性处理
+
+- #### 创建R类
+
+```java
+public class R {
+    private boolean flag;
+    private Object data;
+
+    public R() {
+    }
+
+    public R(boolean flag, Object data) {
+        this.flag = flag;
+        this.data = data;
+    }
+
+    public R(boolean flag) {
+        this.flag = flag;
+    }
+
+    public boolean isFlag() {
+        return flag;
+    }
+
+    public void setFlag(boolean flag) {
+        this.flag = flag;
+    }
+
+    public Object getData() {
+        return data;
+    }
+
+    public void setData(Object data) {
+        this.data = data;
+    }
+
+    @Override
+    public String toString() {
+        return "R{" +
+                "flag=" + flag +
+                ", data=" + data +
+                '}';
+    }
+}
+```
+
+- #### 表现层
+
+```java
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import skyblog.domain.R;
+import skyblog.service.Impl.UserServiceImpl;
+
+@RestController
+@RequestMapping("/users")
+public class UserController {
+    @Autowired
+    private UserServiceImpl userService;
+    @GetMapping("/{id}")
+    public R getById(@PathVariable Long id){
+        R r = new R(true,userService.selectById(id));
+        return r;
+    }
+}
+```
+
+## SpringBoot部署
+
+### Window基本命令
+
+```xml
+#查询端口
+netstat -ano
+#查询指定端口
+netstat -ano |findstr [端口号]
+#根据进程PID查询进程名称
+tasklist |findstr [端口号]
+#根据PID杀死任务
+taskkill /F /PID [进程PID]
+#根据进程名称杀死任务
+taskkill -f -t -im [进程名称]
+```
+
