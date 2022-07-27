@@ -10,15 +10,15 @@
 
 #### 兴趣爱好：乒乓、羽毛、运动、计算机、音乐、电影、聊天(吹牛)
 
-#### 目前在学：🔴SpringBoot🟠数据结构与算法🟡计算机网络🟢Android Studio
+#### 目前在学：🔴SpringCloud🟠数据结构与算法🟢Android Studio
 
-#### 计划学习：🟢SpringCloud🟠大数据🔴网络安全
+#### 计划学习：🟠大数据🔴网络安全🟡计算机网络
 
 #### 期待职业：🔵后端开发、🔵网络安全
 
 #### 擅长语言：Java、C
 
-#### 拥有的技术栈：SSM、Mybatis-P、Mysql、Servlet、Jsp、Html、CSS、JS、Vue、Ajax
+#### 拥有的技术栈：SpringBoot、SSM、Mybatis-P、Mysql、Servlet、Jsp、Html、CSS、JS、Vue、Ajax
 
 #### 博客：http://skyblog.top/
 
