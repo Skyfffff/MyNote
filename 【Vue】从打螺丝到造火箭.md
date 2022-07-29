@@ -67,6 +67,8 @@ Hello World!
 ## v-on添加事件监听
 
 > v-on:事件名
+>
+> @事件名
 
 ```html
 <body>
@@ -90,6 +92,35 @@ Hello World!
   </script>
 </body>
 ```
+## v-show、v-if切换元素显示隐藏
+
+> 区别：v-if操作dom元素，消耗大。v-show操作修改样式
+>
+> 频繁切换用v-show但是不安全
+
+```html
+<body>
+  <div id="app">
+    <button @click="change">点击切换隐藏</button>
+    <img v-show="isShow" src="http://skyblog.top/wp-content/uploads/2022/03/670920-scaled.jpg" alt="图片已丢失">
+  </div>
+  <script src="vue.js"></script>
+  <script>
+    new Vue({
+      el:'#app',
+      data:{
+        isShow:false
+      },
+      methods:{
+        change:function(){
+          this.isShow = !this.isShow;
+        }
+      }
+    })
+  </script>
+</body>
+```
+
 ## v-bind绑定标签属性
 
 ```html
@@ -116,7 +147,7 @@ Hello World!
 ```html
 <body>
   <div id="app">
-    <p v-for="list in lists">
+    <p v-for="list in lists" v-bind:title="list.text">
       {{list.text}}
     </p>
   </div>
@@ -142,9 +173,7 @@ Hello World!
 学习Vue
 ```
 
-
-
-## v-model控制表单输入和应用状态
+## v-model获取表单输入双向绑定
 
 ```html
 <body>
@@ -158,6 +187,36 @@ Hello World!
       el: '#app',
       data: {
         msg:'Hello World'
+      }
+    })
+  </script>
+</body>
+```
+
+## axios异步请求
+
+```html
+<body>
+  <div id="app">
+    <button @click="getJoke">点击获取笑话</button>
+    <p>{{joke}}</p>
+  </div>
+  <script src="vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    new Vue({
+      el:'#app',
+      data:{
+        joke:'我是一个笑话'
+      },
+      methods:{
+        getJoke:function(){
+          var temp = this;
+          axios.get('https://autumnfish.cn/api/joke').then(function(response){
+            temp.joke = response.data;
+            console.log(temp.joke);
+          })
+        }
       }
     })
   </script>
