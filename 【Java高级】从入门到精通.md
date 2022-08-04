@@ -95,6 +95,8 @@ public class updServer {
 
 #### UDP发送端改进
 
+> 连续发送
+
 ```java
 import java.io.IOException;
 import java.net.*;
@@ -124,6 +126,8 @@ public class udpClientTest01 {
 ```
 
 #### UDP接收端改进
+
+> 持续接收
 
 ```java
 import java.io.IOException;
@@ -208,6 +212,8 @@ public class tcpServerTest01 {
 
 #### TCP发送端改进
 
+> 连续发送
+
 ```java
 import java.io.IOException;
 import java.io.OutputStream;
@@ -239,6 +245,8 @@ public class tcpClientTest01 {
 
 #### TCP接收端改进
 
+> 多线程＋持续接收
+
 ```java
 import java.io.IOException;
 import java.io.InputStream;
@@ -246,19 +254,133 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class tcpServerTest01 {
-    static int count;
     public static void main(String[] args) throws IOException, InterruptedException {
         ServerSocket sSocket = new ServerSocket(5656);
-        while (true){
+        while (true) {
             Socket socket = sSocket.accept();
-            InputStream is = socket.getInputStream();
-            byte[] bytes = new byte[1024];
-            int len = is.read(bytes);
-            System.out.println("来自："+socket.getRemoteSocketAddress());
-            System.out.println(new String(bytes,0,len));
-            is.close();
-            socket.close();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        InputStream is = socket.getInputStream();
+                        byte[] bytes = new byte[1024];
+                        int len = is.read(bytes);
+                        System.out.println("来自：" + socket.getRemoteSocketAddress());
+                        System.out.println(new String(bytes, 0, len));
+                        is.close();
+                        socket.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
         }
+    }
+}
+```
+
+### 手写Http
+
+```java
+import java.io.*;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+public class httpTcpServer {
+    public static void main(String[] args) throws IOException {
+        //监听端口
+        ServerSocket sSocket = new ServerSocket(80);
+        while (true) {
+            //拦截请求
+            Socket accept = sSocket.accept();
+            //从本地读取静态页面到内存
+            FileInputStream fis = new FileInputStream(new File("D:\\Sourcecode\\Web前端\\index.html"));
+            byte[] bytes = new byte[1024];
+            int len = fis.read(bytes);
+            //发送数据
+            OutputStream ops = accept.getOutputStream();
+            ops.write(bytes, 0, len);
+            //释放资源
+            ops.close();
+            accept.close();
+        }
+    }
+}
+```
+
+## 多线程
+
+### 实现方法
+
+#### 继承Thread类重写run方法
+
+```java
+public class ThreadTest01 extends Thread{
+    @Override
+    public void run() {
+        System.out.println(Thread.currentThread().getName()+"【线程已开启】");
+        System.out.println(Thread.currentThread().getName()+"【线程已结束】");
+    }
+
+    public static void main(String[] args) {
+        System.out.println(Thread.currentThread().getName()+"【线程已开启】");
+        //开启子线程
+        new ThreadTest01().start();
+        new ThreadTest01().start();
+        System.out.println(Thread.currentThread().getName()+"【线程已结束】");
+    }
+}
+```
+
+#### 实现Runnable接口
+
+> 实现Runnable接口
+
+```java
+public class ThreadTest02 implements Runnable{
+    @Override
+    public void run() {
+        System.out.println(Thread.currentThread().getName()+"【线程已开启】");
+        System.out.println(Thread.currentThread().getName()+"【线程已结束】");
+    }
+
+    public static void main(String[] args) {
+        System.out.println(Thread.currentThread().getName()+"【线程已开启】");
+        new Thread(new ThreadTest02()).start();
+        System.out.println(Thread.currentThread().getName()+"【线程已结束】");
+    }
+}
+```
+
+> Jdk8匿名内部类
+
+```java
+public class ThreadTest02{
+    public static void main(String[] args) {
+        System.out.println(Thread.currentThread().getName()+"【线程已开启】");
+        new Thread(new Runnable(){
+            @Override
+            public void run() {
+                System.out.println(Thread.currentThread().getName()+"【线程已开启】");
+                System.out.println(Thread.currentThread().getName()+"【线程已结束】");
+            }
+        }).start();
+        System.out.println(Thread.currentThread().getName()+"【线程已结束】");
+    }
+}
+```
+
+> lambda表达式
+
+```java
+public class ThreadTest02{
+    public static void main(String[] args) {
+        System.out.println(Thread.currentThread().getName()+"【线程已开启】");
+        new Thread(() -> {
+            System.out.println(Thread.currentThread().getName()+"【线程已开启】");
+            System.out.println(Thread.currentThread().getName()+"【线程已结束】");
+        }).start();
+        System.out.println(Thread.currentThread().getName()+"【线程已结束】");
     }
 }
 ```
