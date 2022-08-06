@@ -384,3 +384,103 @@ public class ThreadTest02{
     }
 }
 ```
+
+#### 实现Callable接口
+
+```java
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
+
+public class ThreadTest03 implements Callable<String> {
+    @Override
+    public String call() throws Exception {
+        System.out.println(Thread.currentThread().getName()+"【线程已开启】");
+        return "flag:ture";
+    }
+
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
+        ThreadTest03 threadTest03 = new ThreadTest03();
+        FutureTask<String> futureTask = new FutureTask<>(threadTest03);
+        //开启线程
+        new Thread(futureTask).start();
+        //挂起线程。等待返回结果
+        String result = futureTask.get();
+        System.out.println(Thread.currentThread().getName()+"【"+result+"】");
+    }
+}
+```
+
+#### 线程池
+
+> 匿名内部类
+
+```java
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class ThreadTest04 {
+    public static void main(String[] args) {
+        ExecutorService executorService = Executors.newCachedThreadPool();
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println(Thread.currentThread().getName()+"线程开始");
+            }
+        });
+    }
+}
+```
+
+> lambda表达式
+
+```java
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class ThreadTest04 {
+    public static void main(String[] args) {
+        ExecutorService executorService = Executors.newCachedThreadPool();
+        executorService.execute(() -> System.out.println(Thread.currentThread().getName()+"线程开始"));
+    }
+}
+```
+
+#### Spring注解@Async
+
+> xxx
+
+### 锁
+
+#### synchronized锁
+
+```java
+public class lockTest01 implements Runnable {
+    private static int count = 100;
+
+    @Override
+    public void run() {
+        while (true) {
+            if (count < 0) {
+                return;
+            }
+            try {
+                Thread.sleep(30);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            //上锁(对象锁)
+            synchronized (this) {
+                count--;
+                System.out.println(Thread.currentThread().getName() + "当前值:" + count);
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        lockTest01 lock = new lockTest01();
+        new Thread(lock).start();
+        new Thread(lock).start();
+    }
+}
+```
