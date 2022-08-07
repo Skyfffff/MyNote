@@ -93,7 +93,7 @@ public class updServer {
 }
 ```
 
-#### UDP发送端改进
+> UDP发送端改进
 
 > 连续发送
 
@@ -125,7 +125,7 @@ public class udpClientTest01 {
 
 ```
 
-#### UDP接收端改进
+> UDP接收端改进
 
 > 持续接收
 
@@ -210,7 +210,7 @@ public class tcpServerTest01 {
 }
 ```
 
-#### TCP发送端改进
+> TCP发送端改进
 
 > 连续发送
 
@@ -243,7 +243,7 @@ public class tcpClientTest01 {
 }
 ```
 
-#### TCP接收端改进
+> TCP接收端改进
 
 > 多线程＋持续接收
 
@@ -481,6 +481,161 @@ public class lockTest01 implements Runnable {
         lockTest01 lock = new lockTest01();
         new Thread(lock).start();
         new Thread(lock).start();
+    }
+}
+```
+
+#### SpringMvc中上锁注意事项
+
+> **bean是单例的，需要@Scope（value="prototype")注解改成多例**
+
+#### wait和notify
+
+> wait：线程进入WAITING状态，等待其他线程的通知或者被中断，才会返回。使用wait会释放当前锁
+>
+> notify：通知一个在对象上等待的线程，使其从main方法返回，返回的前提是该线程获取了对象的锁
+>
+> notifyAll：通知所有等待在该对象的线程
+
+```java
+public class lockTest02 {
+    private Object object = new Object();
+
+    public static void main(String[] args) throws InterruptedException {
+        new lockTest02().cal();
+    }
+
+    public void cal() throws InterruptedException {
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("[1]");
+                synchronized (object) {
+                    try {
+                        //进入WAITING状态，释放锁，阻塞线程
+                        object.wait();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                System.out.println("[2]");
+            }
+        }).start();
+
+        Thread.sleep(1000);
+        synchronized (object) {
+            //通知object对象上等待的线程使其从main方法返回，返回的前提是该线程获取了对象的锁
+            object.notify();
+        }
+    }
+}
+```
+
+### 反射
+
+#### 创建对象
+
+> 调用无参构造器
+
+```java
+import domain.User;
+
+public class reflectionTest01 {
+    public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+        //反射得到class
+        Class<?> user = Class.forName("domain.User");
+        //创建无参对象
+        User u =(User) user.newInstance();
+        System.out.println(u);
+    }
+}
+```
+
+> 调用有参构造器
+
+```java
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
+public class reflectionTest02 {
+    public static void main(String[] args) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+        //反射得到class
+        Class<?> user = Class.forName("domain.User");
+        //得到构造器
+        Constructor<?> constructor = user.getConstructor(String.class, String.class);
+        //创建有参对象
+        User u = (User) constructor.newInstance("Sky", "root");
+        System.out.println(u);
+    }
+}
+```
+
+> 调用私有构造器
+
+```java
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
+public class reflectionTest02 {
+    public static void main(String[] args) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+        //反射得到class
+        Class<?> userClass = Class.forName("domain.User");
+        //得到构造器（私有公有都可以）
+        Constructor<?> constructor = userClass.getDeclaredConstructor(String.class,String.class);
+        //暴力开启访问权限
+        constructor.setAccessible(true);
+        //创建有参对象
+        User u = (User) constructor.newInstance("Sky","666");
+        System.out.println(u);
+    }
+}
+```
+
+#### 访问属性
+
+```java
+import java.lang.reflect.Field;
+
+public class reflectionTest03 {
+    public static void main(String[] args) throws ClassNotFoundException, NoSuchFieldException, InstantiationException, IllegalAccessException {
+        //反射得到class
+        Class<?> userClass = Class.forName("domain.User");
+        //反射得到私有属性
+        Field userName = userClass.getDeclaredField("userName");
+        //暴力开启访问权限
+        userName.setAccessible(true);
+        //创建对象
+        User user = (User) userClass.newInstance();
+        //设置属性值
+        userName.set(user,"Sky");
+        System.out.println(user);
+    }
+}
+```
+
+#### 调用方法
+
+```java
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
+public class reflectionTest04 {
+    public static void main(String[] args) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+        //反射得到class
+        Class<?> userClass = Class.forName("domain.User");
+        //得到对应方法
+        Method getUserName = userClass.getDeclaredMethod("getUserName");
+        //开启方法访问权限
+        getUserName.setAccessible(true);
+        //获取有参构造器
+        Constructor<?> constructor = userClass.getConstructor(String.class, String.class);
+        //创建对象
+        User user = (User) constructor.newInstance("Sky", "root");
+        //调用方法
+        Object invoke = getUserName.invoke(user);
+        System.out.println(invoke);
     }
 }
 ```

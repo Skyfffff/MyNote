@@ -440,3 +440,73 @@ int main() {
 ### 顺序栈
 
 #### 结构体静态实现
+
+```C
+#include<stdio.h>
+#define MAX_LENGTH 20
+typedef struct MyStruct
+{
+	int elem[MAX_LENGTH];//数组作为栈
+	int top; //栈顶
+}sqStack;
+//初始化栈
+void initStack(sqStack* stack) {
+	for (int i = 0; i < MAX_LENGTH; i++) {
+		(*stack).elem[i] = 0;
+		(*stack).top = 0;
+	}
+}
+//出栈
+int pop(sqStack* stack) {
+	if ((*stack).top==0)//判断是否空栈
+	{
+		return -1;
+	}
+	else
+	{
+		(* stack).top--;
+		//返回弹出的值
+		return (* stack).elem[(*stack).top];
+	}
+	
+}
+//入栈
+int push(sqStack* stack, int elem) {
+	if ((*stack).top>=MAX_LENGTH)//判断是否溢出
+	{
+		return -1;
+	}
+	else {
+		(*stack).elem[(*stack).top]=elem;
+		(*stack).top++;
+		return 1;
+	}
+	
+}
+//弹出所有元素
+void listAll(sqStack* stack) {
+	int x;
+	while (true)
+	{
+		if ((x = pop(stack))==-1)
+		{
+			return;
+		}
+		else
+		{
+			printf("%d\n", x);
+		}
+		
+	}
+}
+int main() {
+	sqStack stack;
+	initStack(&stack);
+	push(&stack, 123);
+	push(&stack, 77);
+	push(&stack, 88);
+	push(&stack, 99);
+	listAll(&stack);
+}
+```
+
