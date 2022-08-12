@@ -68,37 +68,33 @@ int a[n];
 
 - **基本操作**
 
-  - 1.IniList(&L) //构造空表L。
-
-  - 2.ListLength (L) //求表L的长度
-
-  - 3.GetElem(L,i,&e) //取元素ai,由e返回ai
-
-  - 4.PriorElem(L,ce,&pre_e) //求ce的前驱,由pre_e返回
-
-  - 5.InsertElem(&L,i,e) //在元素ai之前插入新元素e
-
-  - 6.DeleteElem(&L,i) //删除第i个元素
-
-  - 7.EmptyList(L) //判断L是否为空表
+  | 函数名                 | 解释                    |
+  | ---------------------- | ----------------------- |
+  | IniList(&L)            | 构造空表L               |
+  | ListLength (L)         | 求表L的长度             |
+  | GetElem(L,i,&e)        | 取元素ai,由e返回ai      |
+  | PriorElem(L,ce,&pre_e) | 求ce的前驱,由pre_e返回  |
+  | InsertElem(&L,i,e)     | 在元素ai之前插入新元素e |
+  | DeleteElem(&L,i)       | 删除第i个元素           |
+  | EmptyList(L)           | 判断L是否为空表         |
 
 - **优点：**
 
-  - (1)是一种随机存取结构，存取任何元素的时间是一个常数，速度快；
+  - 是一种随机存取结构，存取任何元素的时间是一个常数，速度快；
 
-  - (2)结构简单，逻辑上相邻的元素在物理上也是相邻的；
+  - 结构简单，逻辑上相邻的元素在物理上也是相邻的；
 
-  - (3)不使用指针，节省存储空间。
+  - 不使用指针，节省存储空间。
 
   **缺点：**
 
-  - (1)插入和删除元素要移动大量元素，消耗大量时间；
+  - 插入和删除元素要移动大量元素，消耗大量时间；
 
-  - (2)需要一个连续的存储空间；
+  - 需要一个连续的存储空间；
 
-  - (3)插入元素可能发生“溢出”；
+  - 插入元素可能发生“溢出”；
 
-  - (4)自由区中的存储空间不能被其它数据占用(共享)。
+  - 自由区中的存储空间不能被其它数据占用(共享)。
 
 #### 数组实现
 
@@ -427,15 +423,13 @@ int main() {
 
 - **栈的基本操作**
 
-  - (1) Initstack(s)： 置s为空栈。
-
-  - (2) Push(s,e)： 元素e进栈s。若s已满，则发生溢出。若不能解决溢出，重新分配空间失败，则插入失败。
-
-  - (3) Pop(s,e)： 删除栈s的顶元素，并送入e 。若s为空栈,发生“下溢”(underflow)；为空栈时，表示某项任务已完成。
-
-  - (4) Gettop(s,e)： 栈s的顶元素拷贝到e。若s为空栈，则结束拷贝。
-
-  - (5) Empty(s)： 判断s是否为空栈。若s为空栈,则Empty(s)为true；否则为false。
+  | 函数名       | 解释                                                         |
+  | ------------ | ------------------------------------------------------------ |
+  | Initstack(s) | 置s为空栈                                                    |
+  | Push(s,e)    | 元素e进栈s。若s已满，则发生溢出。若不能解决溢出，重新分配空间失败，则插入失败 |
+  | Pop(s,e)     | 删除栈s的顶元素，并送入e 。若s为空栈,发生“下溢”(underflow)；为空栈时，表示某项任务已完成 |
+  | Gettop(s,e)  | 栈s的顶元素拷贝到e。若s为空栈，则结束拷贝                    |
+  | Empty(s)     | 判断s是否为空栈。若s为空栈,则Empty(s)为true；否则为false     |
 
 ### 顺序栈
 
@@ -509,4 +503,86 @@ int main() {
 	listAll(&stack);
 }
 ```
+
+#### 结构体动态实现
+
+```c
+#include<stdio.h>
+#include <malloc.h>
+
+#define INIT_SIZE 20 //定义初始化栈大小
+#define EX_SIZE 10 //定义每次扩展栈大小
+
+typedef struct MyStruct
+{
+	int* base; //指向栈元素空间
+	int top;  //顶指针
+	int stackSize;//栈元素空间大小
+}sqStack;
+
+void initStack(sqStack* stack) {
+	//分配初始化大小
+	stack->base =(int*) malloc(sizeof(int) * INIT_SIZE);
+	stack->stackSize = INIT_SIZE;
+	stack->top = 0;
+}
+
+int push(sqStack* stack, int value) {
+	if (stack->top >= stack->stackSize) {//判断是否溢出，溢出则扩展
+		//扩展栈大小
+		int* newBase =(int *) realloc(stack->base, sizeof(int) * (stack->stackSize + EX_SIZE));
+		if (!newBase) {//判断是否分配成功，不成功溢出
+			printf("溢出");
+			return -1;
+		}
+		//释放先前空间，替换新空间替代
+		free(stack->base);
+		stack->base = newBase;
+		stack->stackSize += EX_SIZE;
+	}
+	//推入元素
+	stack->base[stack->top] = value;
+	stack->top++;
+	return 1;
+}
+
+int pop(sqStack* stack) {
+	if (stack->top == 0) {//是否空栈，空栈则error
+		return -1;
+	}
+	stack->top--;
+	return stack->base[stack->top];
+}
+
+int main() {
+	sqStack stack;
+	initStack(&stack);
+	push(&stack, 222);
+	push(&stack, 456);
+	push(&stack, 666);
+	printf("%d\n", pop(&stack));
+	printf("%d\n", pop(&stack));
+	printf("%d\n", pop(&stack));
+	printf("%d\n", pop(&stack));
+}
+```
+
+#### 链式栈
+
+xxx
+
+## 队列
+
+### 概念
+
+> 只允许在表的一端删除元素,在另一端插入元素的线性表
+
+| 函数名        | 解释                  |
+| ------------- | --------------------- |
+| InitQueue(q)  | 初始化,将q置为空队列  |
+| QueueEmpty(q) | 判断q是否为空队列     |
+| EnQueue(q,e)  | 将e插入队列q的尾端    |
+| DeQueue(q,e)  | 取走队列q的首元素,送e |
+| QetHead(q,e)  | 读取队列q的首元素,送e |
+| QueueClear(q) | 置q为空队列           |
 
