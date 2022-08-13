@@ -1,10 +1,10 @@
 # Java高级&底层源码
 
-## Socket网络编程
+## 🔸Socket网络编程
 
-### UDP网络编程
+### 🔹UDP网络编程
 
-#### UDP协议
+#### ◼UDP协议
 
 - 概念
 
@@ -23,7 +23,7 @@
 - 应用
   - 聊天工具
 
-#### 获取ip
+#### ◼获取ip
 
 > 可通过hosts修改dns解析
 
@@ -43,7 +43,7 @@ public class socketTest01 {
 }
 ```
 
-#### UDP发送端 
+#### ◼UDP发送端 
 
 ```java
 import java.io.IOException;
@@ -67,7 +67,7 @@ public class udpClient  {
 }
 ```
 
-#### UDP接收端
+#### ◼UDP接收端
 
 ```java
 import java.net.DatagramPacket;
@@ -93,9 +93,7 @@ public class updServer {
 }
 ```
 
-> UDP发送端改进
-
-> 连续发送
+> UDP发送端改进、连续发送
 
 ```java
 import java.io.IOException;
@@ -125,9 +123,7 @@ public class udpClientTest01 {
 
 ```
 
-> UDP接收端改进
-
-> 持续接收
+> UDP接收端改进、持续接收
 
 ```java
 import java.io.IOException;
@@ -155,13 +151,13 @@ public class updServerTest01 {
 }
 ```
 
-### TCP网络编程
+### 🔹TCP网络编程
 
-#### TCP协议
+#### ◼TCP协议
 
 xxx
 
-#### TCP发送端
+#### ◼TCP发送端
 
 ```java
 import java.io.IOException;
@@ -184,7 +180,7 @@ public class tcpClientTest01 {
 }
 ```
 
-#### TCP接收端
+#### ◼TCP接收端
 
 ```java
 import java.io.IOException;
@@ -210,9 +206,7 @@ public class tcpServerTest01 {
 }
 ```
 
-> TCP发送端改进
-
-> 连续发送
+> TCP发送端改进、连续发送
 
 ```java
 import java.io.IOException;
@@ -243,9 +237,7 @@ public class tcpClientTest01 {
 }
 ```
 
-> TCP接收端改进
-
-> 多线程＋持续接收
+> TCP接收端改进、多线程＋持续接收
 
 ```java
 import java.io.IOException;
@@ -279,7 +271,7 @@ public class tcpServerTest01 {
 }
 ```
 
-### 手写Http
+### 🔹手写Http
 
 ```java
 import java.io.*;
@@ -308,11 +300,11 @@ public class httpTcpServer {
 }
 ```
 
-## 多线程
+## 🔸多线程
 
-### 实现方法
+### 🔹实现方法
 
-#### 继承Thread类重写run方法
+#### ◼继承Thread类重写run方法
 
 ```java
 public class ThreadTest01 extends Thread{
@@ -332,7 +324,7 @@ public class ThreadTest01 extends Thread{
 }
 ```
 
-#### 实现Runnable接口
+#### ◼实现Runnable接口
 
 > 实现Runnable接口
 
@@ -385,7 +377,7 @@ public class ThreadTest02{
 }
 ```
 
-#### 实现Callable接口
+#### ◼实现Callable接口
 
 ```java
 import java.util.concurrent.Callable;
@@ -411,7 +403,7 @@ public class ThreadTest03 implements Callable<String> {
 }
 ```
 
-#### 线程池
+#### ◼线程池
 
 > 匿名内部类
 
@@ -446,13 +438,13 @@ public class ThreadTest04 {
 }
 ```
 
-#### Spring注解@Async
+#### ◼Spring注解@Async
 
 > xxx
 
-### 锁
+### 🔹锁
 
-#### synchronized锁
+#### ◼synchronized锁
 
 ```java
 public class lockTest01 implements Runnable {
@@ -485,11 +477,11 @@ public class lockTest01 implements Runnable {
 }
 ```
 
-#### SpringMvc中上锁注意事项
+#### ◼SpringMvc中上锁注意事项
 
 > **bean是单例的，需要@Scope（value="prototype")注解改成多例**
 
-#### wait和notify
+#### ◼wait和notify
 
 > wait：线程进入WAITING状态，等待其他线程的通知或者被中断，才会返回。使用wait会释放当前锁
 >
@@ -532,11 +524,11 @@ public class lockTest02 {
 }
 ```
 
-### 反射
+### 🔸反射
 
-#### 创建对象
+#### 🔹创建对象
 
-> 调用无参构造器
+- 调用无参构造器
 
 ```java
 import domain.User;
@@ -552,7 +544,7 @@ public class reflectionTest01 {
 }
 ```
 
-> 调用有参构造器
+- 调用有参构造器
 
 ```java
 import java.lang.reflect.Constructor;
@@ -571,7 +563,7 @@ public class reflectionTest02 {
 }
 ```
 
-> 调用私有构造器
+- 调用私有构造器
 
 ```java
 import java.lang.reflect.Constructor;
@@ -592,7 +584,7 @@ public class reflectionTest02 {
 }
 ```
 
-#### 访问属性
+#### 🔹访问属性
 
 ```java
 import java.lang.reflect.Field;
@@ -614,7 +606,7 @@ public class reflectionTest03 {
 }
 ```
 
-#### 调用方法
+#### 🔹调用方法
 
 ```java
 import java.lang.reflect.Constructor;

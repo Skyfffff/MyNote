@@ -1,18 +1,16 @@
 # SpringBoot知识体系笔记
 
-## 概述
+## 🔸概述
 
+## 🔸入门案例
 
-
-## 入门案例
-
-- ### 创建SpringBoot工程
+- **创建SpringBoot工程**
 
 ------
 
 <img src="PictureFile/【SpringBoot】从复杂到简洁.assets/image-20220718103722515.png" alt="image-20220718103722515" style="zoom: 67%;" />
 
-- ### 手写Controller层
+- **手写Controller层**
 
 ```java
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,11 +28,11 @@ public class UserController {
 }
 ```
 
-- ### 运行Application
+- **运行Application**
 
-## SpringBoot配置
+## 🔸SpringBoot配置
 
-### 3种基本配置格式
+### 🔹3种基本配置格式
 
 ------
 
@@ -42,17 +40,17 @@ public class UserController {
 
 
 
-###  配置文件加载的优先级
+###  🔹配置文件加载的优先级
 
 > properties > yml > yaml
 
-###   yml封装数据
+###   🔹yml封装数据
 
 https://www.bilibili.com/video/BV15b4y1a7yG?p=25&t=1.3
 
-## SpringBoot整合第三方技术
+## 🔸SpringBoot整合第三方技术
 
-### 整合Junit
+### 🔹整合Junit
 
 > Boot已经自动整合 
 >
@@ -75,9 +73,9 @@ class ApplicationTests {
     }
 ```
 
-###  整合Mybatis
+###  🔹整合Mybatis
 
-- #### 导入依赖
+- **导入依赖**
 
 ```xml
 <dependency>
@@ -91,7 +89,7 @@ class ApplicationTests {
 </dependency>
 ```
 
-- #### Dao层
+- **Dao层**
 
 ```java
 import org.apache.ibatis.annotations.Mapper;
@@ -105,7 +103,7 @@ public interface UserDao {
 }
 ```
 
-- #### 测试
+- **测试**
 
 ```java
 import org.junit.jupiter.api.Test;
@@ -126,9 +124,9 @@ class ApplicationTests {
 }
 ```
 
-### 整合Mybatis-Plus
+### 🔹整合Mybatis-Plus
 
-- #### 依赖
+- **依赖**
 
 ```xml
 <dependency>
@@ -147,7 +145,7 @@ class ApplicationTests {
 </dependency>
 ```
 
-- #### Dao层
+- **Dao层**
 
 ```java
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -159,7 +157,7 @@ public interface UserDao extends BaseMapper<User> {
 }
 ```
 
-- #### 测试
+- **测试**
 
 ```java
 import org.junit.jupiter.api.Test;
@@ -179,9 +177,9 @@ class ApplicationTests {
 }
 ```
 
-### 整合Druid数据源
+### 🔹整合Druid数据源
 
-- #### 依赖
+- **依赖**
 
 ```xml
 <dependency>
@@ -191,7 +189,7 @@ class ApplicationTests {
 </dependency>
 ```
 
-- #### 配置数据源
+- **配置数据源**
 
 ```yaml
 spring:
@@ -203,9 +201,9 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
 ```
 
-## SpringBoot基本开发
+## 🔸SpringBoot基本开发
 
-### 数据层标准开发
+### 🔹数据层标准开发
 
 > Mybatis-Plus开发
 
@@ -219,9 +217,9 @@ public interface UserDao extends BaseMapper<User> {
 }
 ```
 
-### 业务层标准开发
+### 🔹业务层标准开发
 
-- #### 接口
+- **接口**
 
 ```java
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -236,7 +234,7 @@ public interface UserService {
 }
 ```
 
-- #### 实现类
+- **实现类**
 
 ```JAVA
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -279,7 +277,7 @@ public class UserServiceImpl implements UserService {
 }
 ```
 
-- #### MP分页拦截器
+- **MP分页拦截器**
 
 ```java
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
@@ -298,7 +296,7 @@ public class MpConfig {
 }
 ```
 
-- #### 测试
+- **测试**
 
 
 ```java
@@ -331,9 +329,9 @@ class ApplicationTests {
 }
 ```
 
-### 业务层快速开发
+### 🔹业务层快速开发
 
-- #### 接口
+- **接口**
 
 > 继承IService接口
 
@@ -345,7 +343,7 @@ public interface UserServiceQuick extends IService<User> {
 }
 ```
 
-- #### 实现类
+- **实现类**
 
 > 继承ServiceImpl实现类
 
@@ -360,7 +358,7 @@ public class UserServiceQuickImpl extends ServiceImpl<UserDao, User> {
 }
 ```
 
-- #### 测试
+- **测试**
 
 > 记得配置MP拦截器
 
@@ -395,7 +393,7 @@ class ApplicationTests {
 }
 ```
 
-### 表现层标准开发
+### 🔹表现层标准开发
 
 ```java
 import org.springframework.beans.factory.annotation.Autowired;
@@ -418,9 +416,9 @@ public class UserController {
 }
 ```
 
-### 表现层数据一致性处理
+### 🔹表现层数据一致性处理
 
-- #### 创建R类
+- **创建R类**
 
 ```java
 public class R {
@@ -465,7 +463,7 @@ public class R {
 }
 ```
 
-- #### 表现层
+- **表现层**
 
 ```java
 import org.springframework.beans.factory.annotation.Autowired;
@@ -489,9 +487,9 @@ public class UserController {
 }
 ```
 
-## SpringBoot部署
+## 🔸SpringBoot部署
 
-### Window基本命令
+### 🔹Window基本命令
 
 ```xml
 #查询端口

@@ -2,29 +2,27 @@
 
 # Spring框架
 
-## 收获
+## 🔸收获
 
-> **基于SpringBoot实现基础SSM框架整合**
->
-> **掌握第三方技术与SpringBoot整合思想**             
+- **基于SpringBoot实现基础SSM框架整合**
+- **掌握第三方技术与SpringBoot整合思想**             
 
-## 优点
+## 🔸优点
 
-> **简化开发，降低企业级开发的复杂性**
->
-> **框架整合，高效整合其他技术，提高企业级应用开发与运行效率**
+- **简化开发，降低企业级开发的复杂性**
+- **框架整合，高效整合其他技术，提高企业级应用开发与运行效率**
 
-## 核心概念
+## 🔸核心概念
 
-**IoC（Inversion of Control）控制反转**
+- **IoC（Inversion of Control）控制反转**
 
 > **使用对象时，由主动new产生对象转换为由外部提供对象，此过程中对象创建控制权由程序转移到外部，此思想称为控制反转**
 
-**Bean**
+- **Bean**
 
 > **Ioc容器负责对象的创建、初始化等一系列工作，被创建或被管理的对象在Ioc容器中统称为Bean**
 
-## Spring的发展
+## 🔸Spring的发展
 
 ------
 
@@ -32,15 +30,15 @@
 
 ![image-20220611161625413](PictureFile/Spring.assets/image-20220611161625413.png)
 
-## Spring Framework系统架构图
+## 🔸Spring Framework系统架构图
 
 ------
 
 ![image-20220611162500026](PictureFile/Spring.assets/image-20220611162500026.png)
 
-## XML配置文件开发
+## 🔸XML配置文件开发
 
-### IoC入门案例
+### 🔹IoC入门案例
 
 - **导入Spring依赖**
 
@@ -69,7 +67,7 @@ BookDao bookDao = (BookDao) ctx.getBean("bookDao");
 bookDao.save();
 ```
 
-### DI入门案例
+### 🔹DI入门案例
 
 - **删除使用new的形式创建对象的代码**
 - **在service层提供setter方法**
@@ -90,7 +88,7 @@ public void setBookDao(BookDao bookDao) {
     </bean>
 ```
 
-### bean的各种属性关键字解释
+### 🔹bean的各种属性关键字解释
 
 - **name（起别名）**
 
@@ -135,7 +133,7 @@ public void setBookDao(BookDao bookDao) {
 
 > *封装实体的域对象*
 
-### bean的实例化
+### 🔹bean的实例化
 
 - **构造方法**
 
@@ -189,19 +187,20 @@ public void setBookDao(BookDao bookDao) {
   }
   ```
 
-### bean的生命周期
+### 🔹bean的生命周期
 
-### 生命周期流程
+### 🔹生命周期流程
 
 - **初始化容器**
 
-> 1.创建对象（内存分配）
->
-> 2.执行构造方法
->
-> 3.执行属性注入（set操作）
->
-> 4.执行bean初始化方法
+  - **1.创建对象（内存分配）**
+
+  - **2.执行构造方法**
+
+
+  - **3.执行属性注入（set操作）**
+
+  - **4.执行bean初始化方法**
 
 - **使用bean**
 
@@ -211,11 +210,11 @@ public void setBookDao(BookDao bookDao) {
 
 > 1.执行bean销毁方法
 
-### 生命周期的控制
+### 🔹生命周期的控制
 
-- **方法一(实现接口法)**
+#### ◼方法一(实现接口法)
 
-> **主函数代码**
+- **主函数代码**
 
 ```java
 public static void main(String[] args) {
@@ -231,7 +230,7 @@ public static void main(String[] args) {
     }
 ```
 
-> **配置**
+- **配置**
 
 ```xml
 <bean id="bookDao" class="dao.BookDaoImpl"></bean>
@@ -240,7 +239,7 @@ public static void main(String[] args) {
 </bean>
 ```
 
-> **Service层**
+- **Service层**
 
 ```java
 public class BookServiceImpl implements BookService, InitializingBean, DisposableBean {//实现两个接口
@@ -269,7 +268,7 @@ public class BookServiceImpl implements BookService, InitializingBean, Disposabl
 }
 ```
 
-> **Dao层代码实现**
+- **Dao层代码实现**
 
 ```java
 public class BookDaoImpl implements BookDao{
@@ -280,26 +279,26 @@ public class BookDaoImpl implements BookDao{
 }
 ```
 
-- 方法二(配置法)
+#### ◼方法二(配置法)
 
 > init-method
 > destroy-method
 
-### bean的获取
+### 🔹bean的获取
 
-- 使用bean名称获取
+#### ◼使用bean名称获取
 
 ```java
 BookDao bookDao = (BookDao) ctx.getBean("bookDao");
 ```
 
-- 使用bean名称获取指定类型
+#### ◼使用bean名称获取指定类型
 
 ```java
 BookDao bookDao = ctx.getBean("bookDao", BookDao.class);
 ```
 
-- 使用bean类型获取
+#### ◼使用bean类型获取
 
 > 只能有一个同类型的bean
 
@@ -307,9 +306,9 @@ BookDao bookDao = ctx.getBean("bookDao", BookDao.class);
 BookDao bookDao = ctx.getBean(BookDao.class);
 ```
 
-### 依赖注入方式
+### 🔹依赖注入方式
 
-### setter注入
+#### ◼setter注入
 
 - **删除使用new的形式创建对象的代码**
 
@@ -331,7 +330,7 @@ public void setBookDao(BookDao bookDao) {
     </bean>	
 ```
 
-### 构造器注入
+#### ◼构造器注入
 
 - **提供一个有参构造器**
 
@@ -361,7 +360,7 @@ public BookServiceImpl(BookDao bookDao) {
 </bean>
 ```
 
-### 自动装配
+#### ◼自动装配
 
 > 需要setter方法
 >
@@ -375,7 +374,7 @@ public BookServiceImpl(BookDao bookDao) {
 <bean id="bookService" class="service.BookServiceImpl" autowire="byType"></bean>
 ```
 
-### 各种集合注入
+#### ◼各种集合注入
 
 ```xml
 <bean id="bookDao"class="dao.bookDao">
@@ -419,9 +418,9 @@ public BookServiceImpl(BookDao bookDao) {
 > 5.实际开发过程中还要根据实际情况分析，如果受控对象没有提供setter方法就必须使用构造器注入
 > 6.自己开发的模块推荐使用setter注入
 
-## 注解开发
+## 🔸注解开发
 
-### 基本注解开发【有配置文件形式】
+### 🔹基本注解开发【有配置文件形式】
 
 - **关键词**
   - **@Controller:用于表现层bean定义**
@@ -461,7 +460,7 @@ public class BookDaoImpl implements BookDao{
 }
 ```
 
-### 高阶注解开发【无配置文件形式】
+### 🔹高阶注解开发【无配置文件形式】
 
 - **写配置类**
 
@@ -517,7 +516,7 @@ public class BookDaoImpl implements BookDao{
 }
 ```
 
-### 注解依赖注入
+### 🔹注解依赖注入
 
 - **主函数实现代码**
 
@@ -586,7 +585,7 @@ private String string;
 private String string;
 ```
 
-###  注解开发管理第三方bean
+###  🔹注解开发管理第三方bean
 
 > 以注解开发Druid第三方bean为例
 
@@ -639,7 +638,7 @@ public class App {
 }
 ```
 
-### 第三方bean依赖注入方法
+### 🔹第三方bean依赖注入方法
 
 - **简单类型**
 
@@ -694,21 +693,21 @@ public class jdbcConfig {
 }
 ```
 
-## Spring整合Mybatis
+## 🔸Spring整合Mybatis
 
 [黑马程序员2022最新SSM框架教程_Spring+SpringMVC+Maven高级+SpringBoot+MyBatisPlus企业实用开发技术_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV1Fi4y1S7ix?p=29&vd_source=d6945470e58840da44f64f5dc572e207)
 
-## AOP面向切片
+## 🔸AOP面向切片
 
-### 概念
+### 🔹概念
 
 > AOP（Apect Oriented Programming）面向切面编程，一种编程范式，指导开发者如何组织程序结构
 
-### 本质
+### 🔹本质
 
 > 代理模式
 
-### 核心概念
+### 🔹核心概念
 
 - **连接点（Join Point）**：程序执行过程中的任意位置，粒度为执行方法、抛出异常、设置变量等
 
@@ -730,13 +729,13 @@ public class jdbcConfig {
 
 - **切面（Aspect）**：描述通知与切入点的对应关系
 
-### 示意图
+### 🔹示意图
 
 ------
 
 ![image-20220616222331156](PictureFile/Spring.assets/image-20220616222331156.png)
 
-###  AOP入门案例
+###  🔹AOP入门案例
 
 -  **导入依赖**
 
@@ -775,7 +774,7 @@ public class MyAop {
 }
 ```
 
-### AOP切入点表达式
+### 🔹AOP切入点表达式
 
 ------
 
@@ -787,7 +786,7 @@ public class MyAop {
 
 ![image-20220622204519253](PictureFile/Spring.assets/image-20220622204519253.png)
 
-### AOP通知类型
+### 🔹AOP通知类型
 
 - **前置通知**
 
@@ -811,7 +810,7 @@ public class MyAop {
 
 ![image-20220622205846564](PictureFile/Spring.assets/image-20220622205846564.png)
 
-### AOP通知获取参数
+### 🔹AOP通知获取参数
 
 ------
 
@@ -825,15 +824,15 @@ public class MyAop {
 
 ![image-20220623161035529](PictureFile/Spring.assets/image-20220623161035529.png)
 
-## Spring事物
+## 🔸Spring事物
 
 [黑马程序员2022最新SSM框架教程_Spring+SpringMVC+Maven高级+SpringBoot+MyBatisPlus企业实用开发技术_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV1Fi4y1S7ix?p=40&vd_source=d6945470e58840da44f64f5dc572e207)
 
-## SpringMVC
+## 🔸SpringMVC
 
-### 入门案例
+### 🔹入门案例
 
-- 导入依赖
+- **导入依赖**
 
 ```xml
 <!-- https://mvnrepository.com/artifact/org.springframework/spring-webmvc -->
@@ -852,7 +851,7 @@ public class MyAop {
 </dependency>
 ```
 
-- UserController类
+- **UserController类**
 
 ```java
 @Controller
@@ -867,7 +866,7 @@ public class UserController {
 }
 ```
 
-- 新建springMvcConfig类
+- **新建springMvcConfig类**
 
 ```java
 @Configuration
@@ -876,7 +875,7 @@ public class SpringMvcConfig {
 }
 ```
 
-- 设置ServletConfig配置
+- **设置ServletConfig配置**
 
 ```java
 public class ServletContainerslnitConfig extends AbstractDispatcherServletInitializer {
@@ -902,9 +901,9 @@ public class ServletContainerslnitConfig extends AbstractDispatcherServletInitia
 }
 ```
 
-### SpringMVC请求
+### 🔹SpringMVC请求
 
-- 导入依赖 用于json的相互转化
+- **导入依赖 用于json的相互转化**
 
 ```xml
 <dependency>
@@ -914,7 +913,7 @@ public class ServletContainerslnitConfig extends AbstractDispatcherServletInitia
 </dependency>
 ```
 
-> 接收json数据并且封装到pojo里
+- **接收json数据并且封装到pojo里**
 
 ```java
 @Controller
@@ -955,9 +954,9 @@ public class UserSendMsg {
 
 ![image-20220708164608560](PictureFile/Spring.assets/image-20220708164608560.png)
 
-### SpringMVC响应
+### 🔹SpringMVC响应
 
->  响应页面
+- **响应页面**
 
 ```java
 @Controller
@@ -969,7 +968,7 @@ public class UserSendMsg {
 }
 ```
 
-> 响应文本 
+- **响应文本**
 
 ```java
 @Controller
@@ -982,7 +981,7 @@ public class UserSendMsg {
 }
 ```
 
-> 响应json(POJO转json)
+- **响应json(POJO转json)**
 
 ```java
 @Controller
@@ -1000,7 +999,7 @@ public class UserSendMsg {
 
 > 同理。。。
 
-## REST风格
+## 🔸REST风格
 
 - **简介**
 
@@ -1090,7 +1089,7 @@ public class UserSendMsg {
 }
 ```
 
-## SSM整合配置
+## 🔸SSM整合配置
 
 - **基本文件结构**
 
@@ -1453,9 +1452,9 @@ public class TestUserService {
 
 - **Spring事物**
 
-## Spring异常处理
+## 🔸Spring异常处理
 
-### 异常处理方法
+### 🔹异常处理方法
 
 > 在controller包下创建一个类
 
@@ -1473,7 +1472,7 @@ public class ProjectExceptionAdvice {
 }
 ```
 
-### 异常处理方案
+### 🔹异常处理方案
 
 > 地址：https://www.bilibili.com/video/BV1Fi4y1S7ix?p=65&t=474.7
 
@@ -1485,7 +1484,7 @@ public class ProjectExceptionAdvice {
 
 <img src="PictureFile/Spring.assets/image-20220710174255531.png" alt="image-20220710174255531" style="zoom:80%;" />
 
-## Spring放行
+## 🔸Spring放行
 
 > **config目录下建一个SpringMvcRelease类**
 
@@ -1517,9 +1516,9 @@ public class SpringMvcConfig {
 }
 ```
 
-## SpringMVC拦截器
+## 🔸SpringMVC拦截器
 
-### 入门案例
+### 🔹入门案例
 
 > 在controller目录下新建intercept目录，在其中创建ProJectInterceptor类作为拦截器
 
@@ -1579,11 +1578,11 @@ public class SpringMvcRelease extends WebMvcConfigurationSupport {
 }
 ```
 
-### 拦截器的参数
+### 🔹拦截器的参数
 
 > 略......
 
-### 拦截器链的配置
+### 🔹拦截器链的配置
 
 > https://www.bilibili.com/video/BV1Fi4y1S7ix?p=74&t=429.5
 

@@ -1,10 +1,8 @@
-[TOC]
-
 # JDBC
 
-## 数据库链接
+## 🔸数据库链接
 
-### 方法①
+### 🔹方法①
 
 ```java
 public static void main(String[] args) throws SQLException {
@@ -24,7 +22,7 @@ public static void main(String[] args) throws SQLException {
     }
 ```
 
-### 方法②
+### 🔹方法②
 
 ```java
  public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, SQLException {
@@ -45,7 +43,7 @@ public static void main(String[] args) throws SQLException {
     }
 ```
 
-### 方法③
+### 🔹方法③
 
 ```java
 public static void main(String[] args) throws SQLException {
@@ -63,7 +61,7 @@ public static void main(String[] args) throws SQLException {
     }
 ```
 
-### 方法④
+### 🔹方法④
 
 ```java
 public static void main(String[] args) throws ClassNotFoundException, SQLException {
@@ -79,7 +77,7 @@ public static void main(String[] args) throws ClassNotFoundException, SQLExcepti
     }
 ```
 
-### 方法⑤
+### 🔹方法⑤
 
 ```java
 public static void main(String[] args) throws IOException, ClassNotFoundException, SQLException {
@@ -103,7 +101,7 @@ public static void main(String[] args) throws IOException, ClassNotFoundExceptio
     }
 ```
 
-## 数据【增删改】通用
+## 🔸数据【增删改】通用
 
 ```java
 /**
@@ -141,7 +139,7 @@ public static void main(String[] args) throws IOException, ClassNotFoundExceptio
     }
 ```
 
-## 数据【单表查询】通用
+## 🔸数据【单表查询】通用
 
 ```java
 public static void main(String[] args) throws Exception {
@@ -197,7 +195,7 @@ public static void main(String[] args) throws Exception {
     }
 ```
 
-## 数据【多表查询】通用
+## 🔸数据【多表查询】通用
 
 ```java
 /**
@@ -268,7 +266,7 @@ public static void main(String[] args) throws Exception {
     }
 ```
 
-## JDBCUtils工具类
+## 🔸JDBCUtils工具类
 
 ```java
 public class JDBCUtils {
@@ -322,9 +320,9 @@ public class JDBCUtils {
 
 > Mybatis官网：[mybatis – MyBatis 3 | 简介](https://mybatis.org/mybatis-3/zh/index.html)
 
-## 初始准备
+## 🔸初始准备
 
-### 1.加入Mybatis依赖
+### 🔹1.加入Mybatis依赖
 
 ```
 <dependency>
@@ -334,7 +332,7 @@ public class JDBCUtils {
 </dependency>
 ```
 
-### 2.加入Mysql依赖
+### 🔹2.加入Mysql依赖
 
 ```
 <dependency>
@@ -344,7 +342,7 @@ public class JDBCUtils {
 </dependency>
 ```
 
-### 3.加入Junit依赖
+### 🔹3.加入Junit依赖
 
 ```
 <dependency>
@@ -354,7 +352,7 @@ public class JDBCUtils {
 </dependency>
 ```
 
-### 4.创建并且配置mybatis-config.xml
+### 🔹4.创建并且配置mybatis-config.xml
 
 [alert class="danger"]该文件用于配置数据库链接的基本信息[/alert]
 
@@ -381,7 +379,7 @@ public class JDBCUtils {
 </configuration>
 ```
 
-### 5.创建并且配置UserMapper.xml
+### 🔹5.创建并且配置UserMapper.xml
 
 > 该文件用于配置sql语句
 
@@ -397,9 +395,9 @@ public class JDBCUtils {
 </mapper>
 ```
 
-## 代码实现
+## 🔸代码实现
 
-### 基本实现代码
+### 🔹基本实现代码
 
 > [推荐用Mapper做代理减少硬编码](https://www.bilibili.com/video/BV1Qf4y1T7Hx?p=50)
 
@@ -420,7 +418,7 @@ public class MybatisDemo {
 }
 ```
 
-### 使用Mapper代理
+### 🔹使用Mapper代理
 
 **过程：**
 

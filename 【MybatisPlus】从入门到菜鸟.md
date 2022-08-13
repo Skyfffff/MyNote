@@ -1,12 +1,12 @@
 # MyBatisPlus从入门到实践
 
-## 简介
+## 🔸简介
 
 [MyBatis-Plus (opens new window)](https://github.com/baomidou/mybatis-plus)（简称 MP）是一个 [MyBatis (opens new window)](https://www.mybatis.org/mybatis-3/)的增强工具，在 MyBatis 的基础上只做增强不做改变，为简化开发、提高效率而生。
 
 **官网**：[MyBatis-Plus (baomidou.com)](https://baomidou.com/)
 
-## 特点
+## 🔸特点
 
 - **无侵入**：只做增强不做改变，引入它不会对现有工程产生影响，如丝般顺滑
 - **损耗小**：启动即会自动注入基本 CURD，性能基本无损耗，直接面向对象操作
@@ -21,13 +21,13 @@
 - **内置性能分析插件**：可输出 SQL 语句以及其执行时间，建议开发测试时启用该功能，能快速揪出慢查询
 - **内置全局拦截插件**：提供全表 delete 、 update 操作智能分析阻断，也可自定义拦截规则，预防误操作
 
-## 框架结构
+## 🔸框架结构
 
 ![framework](PictureFile/【MybatisPlus】从入门到菜鸟.assets/mybatis-plus-framework.jpg)
 
-## 入门案例
+## 🔸入门案例
 
-- ### SpringBoot整合Mybatis-plus
+- **SpringBoot整合Mybatis-plus**
 
 ```xml
 <dependency>
@@ -48,7 +48,7 @@
 </dependency>
 ```
 
-- ### 配置yml数据源信息
+- **配置yml数据源信息**
 
 ```yaml
 spring:
@@ -60,7 +60,7 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
 ```
 
-- ### Dao层
+- **Dao层**
 
 ```java
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -72,7 +72,7 @@ public interface UserDao extends BaseMapper<User> { //自动生成sql无需手�
 }
 ```
 
-- ### 测试
+- **测试**
 
 ```java
 import org.junit.jupiter.api.Test;
@@ -96,13 +96,13 @@ class ApplicationTests {
 }
 ```
 
-##   查询
+##   🔸查询
 
 [条件构造器 | MyBatis-Plus (baomidou.com)](https://baomidou.com/pages/10c804/#abstractwrapper)
 
-### 分页查询
+### 🔹分页查询
 
-- #### 添加Page拦截器
+- **添加Page拦截器**
 
 ```java
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
@@ -123,7 +123,7 @@ public class MpConfig {
 }
 ```
 
-- #### 测试
+- **测试**
 
 ```java
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -150,7 +150,7 @@ class ApplicationTests {
 }
 ```
 
-- #### 输出
+- **输出**
 
 ```xml
 当前页码：1
@@ -160,7 +160,7 @@ class ApplicationTests {
 数据：[User{id=1, username='UpdateTest', password='123456'}, User{id=4, username='people2', password='123'}]
 ```
 
-### 等匹配查询
+### 🔹等匹配查询
 
 ```java
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -184,7 +184,7 @@ class ApplicationTests {
 }
 ```
 
-### 范围查询
+### 🔹范围查询
 
 ```java
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -208,7 +208,7 @@ class ApplicationTests {
 }
 ```
 
-### 模糊查询
+### 🔹模糊查询
 
 ```java
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -232,9 +232,9 @@ class ApplicationTests {
 }
 ```
 
-## 删除
+## 🔸删除
 
-### 普通删除
+### 🔹普通删除
 
 ```java
 import org.junit.jupiter.api.Test;
@@ -258,9 +258,9 @@ class ApplicationTests {
 }
 ```
 
-### 逻辑删除
+### 🔹逻辑删除
 
-- #### 添加逻辑删除字段
+- **添加逻辑删除字段**
 
 > 通过写yml配置文件亦可
 
@@ -276,7 +276,7 @@ public class User {
 }
 ```
 
-- #### 测试
+- **测试**
 
 ```java
 import org.junit.jupiter.api.Test;
@@ -296,7 +296,7 @@ class ApplicationTests {
 }
 ```
 
-- #### 结果
+- **结果**
 
 ```xml
 ==>  Preparing: UPDATE users SET deleted=1 WHERE id=? AND deleted=0
@@ -304,11 +304,11 @@ class ApplicationTests {
 <==    Updates: 1
 ```
 
-## 映射
+## 🔸映射
 
 <img src="PictureFile/【MybatisPlus】从入门到菜鸟.assets/image-20220721151704599.png" alt="image-20220721151704599" style="zoom:80%;" />
 
-### 字段映射
+### 🔹字段映射
 
 ```java
 @TableName("users")//表名映射
@@ -322,11 +322,11 @@ public class User {
     }
 ```
 
-### 表名映射
+### 🔹表名映射
 
 > **@TableName("users")//表名映射**
 
-## ID生成策略
+## 🔸ID生成策略
 
 - #### domain中做配置
 
@@ -368,11 +368,11 @@ class ApplicationTests {
 ==> Parameters: 1550034549189177346(Long), sky(String), 555555(String)
 ```
 
-## 锁
+## 🔸锁
 
-### 乐观锁
+### 🔹乐观锁
 
-- #### 添加乐观锁字段
+- **添加乐观锁字段**
 
 ```java
 @TableName("users")
@@ -388,7 +388,7 @@ public class User {
 }
 ```
 
-- #### 添加拦截器
+- **添加拦截器**
 
 ```java
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
@@ -412,7 +412,7 @@ public class MpConfig {
 }
 ```
 
-- #### 测试
+- **测试**
 
 ```java
 import org.junit.jupiter.api.Test;
@@ -441,7 +441,7 @@ class ApplicationTests {
 }
 ```
 
-- #### 结果
+- **结果**
 
 ```xml
 ==>  Preparing: SELECT id,username,password,deleted,version FROM users WHERE id=? AND deleted=0
@@ -465,10 +465,10 @@ class ApplicationTests {
 <==    Updates: 0
 ```
 
-- #### 原理解释
+- **原理解释**
 
 > 当两个用户同时访问同一个数据时，只有第一个用户能够修改成功，因为当第二个用户访问时。version的值已经发生改变，所以修改操作无法找到相应的数据，导致修改失败。
 
-## 代码生成器
+## 🔸代码生成器
 
 https://www.bilibili.com/video/BV12T4y1B7C3?p=14&t=846.1
