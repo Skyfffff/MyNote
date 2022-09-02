@@ -213,6 +213,39 @@ def init_main():
 print(init_main())
 ```
 
+### 🔹多返回值
+
+```python
+def main():
+    return 1, 2, "666"
+
+
+x, y, z = main()
+print(x, y, z)
+```
+
+### 🔹参数
+
+```python
+# 不定长参数
+def main(*num):
+    print(num)
+
+
+# 关键字不定长
+def main2(**args):
+    print(args)
+
+
+main(1, 3, 45, 7)
+main2(name="sky", age=20)
+```
+
+```
+(1, 3, 45, 7)
+{'name': 'sky', 'age': 20}
+```
+
 ## 🔸列表
 
 ### 🔹遍历
@@ -269,6 +302,11 @@ print(object_list)
 
 ## 🔸元组
 
+### 🔹特点
+
+- 允许重复
+- 不可修改(无法增加和删除)
+
 ### 🔹定义
 
 ```python
@@ -285,4 +323,175 @@ t4 = (333,)
 # 遍历元组
 for x in t1:
     print(x)
+```
+
+## 🔸切片
+
+### 🔹基本定义
+
+> List[开始下标：结束下标：步长]
+
+### 🔹代码实现
+
+```python
+my_list = [1, 2, 3, 4, 5, 6]
+# 从0开始到4，步长为1可以省略不写
+result1 = my_list[0:4]
+print(result1)
+
+my_str = "012345678"
+# 从头到尾，步长为2
+result2 = my_str[::2]
+print(result2)
+```
+
+```
+[1, 2, 3, 4]
+02468
+```
+
+## 🔸集合
+
+### 🔹基本定义
+
+> {xxx,xxxx,xxx,xxx,...}
+
+```python
+my_set = {"sky", "ct", "sky666", 33, "sky"}
+my_set_empty = set()  # 空集合
+print(my_set)
+print(my_set_empty)
+```
+
+### 🔹基本函数
+
+```python
+# 空集合
+my_set_empty = set()
+
+# 添加元素
+my_set_empty.add("sky")
+my_set_empty.add("ct")
+my_set_empty.add("sky666")
+print(my_set_empty)
+
+# 移除元素
+my_set_empty.remove("ct")
+print(my_set_empty)
+
+# 随机取出元素
+elem = my_set_empty.pop()
+print(elem)
+```
+
+## 🔸字典
+
+### 🔹基本定义
+
+```python
+# 基本定义
+my_dict = {"sky": 666, "ct": 888, "痳化腾": 999}
+print(my_dict)
+
+# 字典嵌套
+my_dict2 = {
+    "sky": {
+        "Java成绩": 100,
+        "C语言成绩": 99
+    }, "ct": {
+        "Java成绩": 98,
+        "C语言成绩": 97
+    }
+}
+print(my_dict2)
+```
+
+### 🔹遍历
+
+```python
+# 遍历字典方法一
+keys = my_dict.keys()
+for key in keys:
+    print(my_dict[key])
+    
+# 遍历字典方法二
+for key in my_dict:
+    print(my_dict[key])
+```
+
+### 🔹基本函数
+
+```python
+# 新增元素
+my_dict["wxy"] = 555
+print(my_dict)
+
+# 删除元素
+my_dict.pop("ct")
+```
+
+## 🔸数据容器的异同
+
+![image-20220814204304003](PictureFile/【Python】从入门到入狱.assets/image-20220814204304003.png)
+
+## 🔸文件操作
+
+### 🔹读取文件
+
+```python
+f = open("D:/test.txt", "r", encoding="UTF-8")
+
+print(f"读取文件的全部行，封装到列表中{f.readlines()}")
+f.close()
+
+print(f"读取全部内容：{f.read()}")
+f.close()
+
+print(f"读取16个字节：{f.read(16)}")
+f.close()
+```
+
+### 🔹写入文件
+
+```python
+f = open("D:/test.txt", "w", encoding="UTF-8")
+
+# 写入文件
+f.write("HELL!!!")
+f.close()
+```
+
+### 🔹追加内容
+
+```python
+f = open("D:/test.txt", "a", encoding="UTF-8")
+
+# 追加操作
+f.write("\nHELL!!!")
+f.close()
+```
+
+## 🔸异常
+
+```python
+try:
+    f = open("D:/testsss.txt", "r", encoding="UTF-8")
+except:
+    print("出异常啦！！！")
+    
+try:
+    f = open("D:/testsss.txt", "r", encoding="UTF-8")
+except FileNotFoundError as e:
+    print(e)
+```
+
+## 🔸模块
+
+```python
+# 导入模块
+import time
+# 导入time模块中的sleep功能
+from time import sleep
+
+print(sleep(23))
 ```
