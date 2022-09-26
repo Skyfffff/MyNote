@@ -842,4 +842,224 @@ class EmpLinkedList {
 
 ![image-20220614173642464](PictureFile/数据结构与算法.assets/image-20220614173642464.png)
 
+#### 代码实现
+
+- **节点类**
+
+```java
+public class TreeNode {
+    private int no; //序号
+    private String data; //数据
+    private TreeNode left; //左节点
+    private TreeNode right; //右节点
+
+    public TreeNode() {
+
+    }
+
+    public TreeNode(int no, String data) {
+        this.no = no;
+        this.data = data;
+    }
+
+    public int getNo() {
+        return no;
+    }
+
+    public void setNo(int no) {
+        this.no = no;
+    }
+
+    public String getData() {
+        return data;
+    }
+
+    public void setData(String data) {
+        this.data = data;
+    }
+
+    public TreeNode getLeft() {
+        return left;
+    }
+
+    public void setLeft(TreeNode left) {
+        this.left = left;
+    }
+
+    public TreeNode getRight() {
+        return right;
+    }
+
+    public void setRight(TreeNode right) {
+        this.right = right;
+    }
+
+    @Override
+    public String toString() {
+        return "TreeNode{" +
+                "no=" + no +
+                ", data='" + data + '\'' +
+                '}';
+    }
+
+    /**
+     * 前序遍历
+     */
+    public void preOrder() {
+        System.out.println(this);
+
+        //判断是否有左边的子节点，有则进行递归
+        if (this.left != null) {
+            left.preOrder();
+        }
+
+        //判断是否有右边的子节点，有则进行递归
+        if (this.right != null) {
+            right.preOrder();
+        }
+    }
+
+    /**
+     * 中序遍历
+     */
+    public void medOrder() {
+        //判断是否有左边的子节点，有则进行递归
+        if (this.left != null) {
+            left.medOrder();
+        }
+
+        System.out.println(this);
+
+        //判断是否有右边的子节点，有则进行递归
+        if (this.right != null) {
+            right.medOrder();
+        }
+    }
+
+    /**
+     * 后序遍历
+     */
+    public void postOrder() {
+        //判断是否有左边的子节点，有则进行递归
+        if (this.left != null) {
+            left.medOrder();
+        }
+        //判断是否有右边的子节点，有则进行递归
+        if (this.right != null) {
+            right.medOrder();
+        }
+        System.out.println(this);
+    }
+}
+```
+
+- **二叉树类**
+
+```java
+public class BinaryTree {
+    private TreeNode root; //声明根节点
+
+    /**
+     * 设置根节点
+     *
+     * @param root 根节点
+     */
+    public void setRoot(TreeNode root) {
+        this.root = root;
+    }
+
+    /**
+     * 前序遍历
+     */
+    public void preOrder() {
+        if (this.root != null) {
+            this.root.preOrder();
+        } else {
+            System.out.println("你干嘛~哎呦~~~");
+        }
+    }
+
+    /**
+     * 中序遍历
+     */
+    public void medOrder() {
+        if (this.root != null) {
+            this.root.medOrder();
+        } else {
+            System.out.println("你干嘛~哎呦~~~");
+        }
+    }
+
+    /**
+     * 后序遍历
+     */
+    public void postOrder() {
+        if (this.root != null) {
+            this.root.postOrder();
+        } else {
+            System.out.println("你干嘛~哎呦~~~");
+        }
+    }
+}
+```
+
+- **主函数**
+
+```java
+public class BinaryTreeMain {
+    public static void main(String[] args) {
+        //创建一个二叉树
+        BinaryTree binaryTree = new BinaryTree();
+
+        //新建一个根节点，设置二叉树节点
+        TreeNode root = new TreeNode(0, "ROOT");
+        binaryTree.setRoot(root);
+
+        //创建新节点
+        TreeNode node1 = new TreeNode(1, "傻博");
+        TreeNode node2 = new TreeNode(1, "苗帅");
+        TreeNode node3 = new TreeNode(1, "樊心眼");
+
+        //关联节点
+        root.setLeft(node1);
+        node1.setRight(node2);
+        root.setRight(node3);
+
+        System.out.println("前序遍历");
+        binaryTree.preOrder();
+
+        System.out.println("中序遍历");
+        binaryTree.medOrder();
+
+        System.out.println("后序遍历");
+        binaryTree.postOrder();
+    }
+}
+```
+
+- **输出**
+
+```
+前序遍历
+TreeNode{no=0, data='ROOT'}
+TreeNode{no=1, data='傻博'}
+TreeNode{no=1, data='苗帅'}
+TreeNode{no=1, data='樊心眼'}
+中序遍历
+TreeNode{no=1, data='傻博'}
+TreeNode{no=1, data='苗帅'}
+TreeNode{no=0, data='ROOT'}
+TreeNode{no=1, data='樊心眼'}
+后序遍历
+TreeNode{no=1, data='傻博'}
+TreeNode{no=1, data='苗帅'}
+TreeNode{no=1, data='樊心眼'}
+TreeNode{no=0, data='ROOT'}
+```
+
+#### 堆排序
+
 ## 🟠算法
+
+
+
