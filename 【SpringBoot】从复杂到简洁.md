@@ -96,7 +96,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import skyblog.domain.User;
 
-@Mapper
+@Mapper//@Mapper注解不需要在SpringBoot启动类上配置扫描类
 public interface UserDao {
     @Select("select * from users where id = #{id}")
     public User selectById(Long id);

@@ -233,7 +233,7 @@ func main() {
    for i := 0; i < len(arr5); i++ {
       fmt.Printf("第%d个元素是：%s\n", i, arr5[i])
    }
-    111
+
    //遍历arr5数组方法二
 	for i, v := range arr5 {
 		fmt.Printf("下标：%d 元素：%d\n", i, v)
@@ -532,9 +532,31 @@ func main() {
 }
 ```
 
-### 资源竞争问题
+### WaitGroup实现同步
 
-> 全局变量加锁
+```go
+package main
+
+import "sync"
+
+var wg = sync.WaitGroup{}
+
+func main() {
+   for i := 0; i < 10; i++ {
+       //计数器加一
+      wg.Add(1)
+      go hello(i)
+   }
+    //计数器为零退出
+   wg.Wait()
+}
+
+func hello(i int) {
+   println(i, "结束啦~")
+    //计数器减去一
+   wg.Done()
+}
+```
 
 ### channel管道
 
@@ -670,3 +692,125 @@ func main() {
 ```
 
 ## 反射
+
+xxx
+
+## 网络编程
+
+#### 服务端
+
+```go
+package main
+
+import (
+	"fmt"
+	"net"
+)
+
+func process(conn net.Conn) {
+	//延迟关闭conn
+	defer func(conn net.Conn) {
+		err := conn.Close()
+		if err != nil {
+			println(err.Error())
+		}
+	}(conn)
+
+	//循环接收客户端消息
+	for {
+		buf := make([]byte, 1024)
+		//读取客户端消息，如没有则阻塞等待
+		n, err := conn.Read(buf)
+		//客户端下线
+		if err != nil {
+			fmt.Printf("%v 客户端下线\n", conn.RemoteAddr().String())
+			return
+		}
+		//打印接受的信息
+		fmt.Printf("%v 发送:%v", conn.RemoteAddr().String(), string(buf[:n]))
+	}
+}
+
+func main() {
+	//开启tcp监听本地8888端口
+	listen, err := net.Listen("tcp", "localhost:8888")
+	println("开始监听~")
+	if err != nil {
+		println(err.Error())
+		return
+	}
+
+	//延迟关闭listen
+	defer func(listen net.Listener) {
+		err := listen.Close()
+		if err != nil {
+			println("出错啦")
+		}
+	}(listen)
+
+	//等待客户端连接
+	for {
+		//println("等待客户端连接")
+		conn, err := listen.Accept()
+		if err != nil {
+			println(err.Error())
+		}
+		fmt.Printf("%v上线 \n", conn.RemoteAddr().String())
+		//开启消息接收协程
+		go process(conn)
+	}
+}
+
+```
+
+#### 客户端
+
+```go
+package main
+
+import (
+   "bufio"
+   "fmt"
+   "net"
+   "os"
+)
+
+func main() {
+   //连接服务端
+   conn, err := net.Dial("tcp", "localhost:8888")
+   if err != nil {
+      println("出错啦", err.Error())
+   }
+
+   //延迟关闭conn
+   defer func(conn net.Conn) {
+      err := conn.Close()
+      if err != nil {
+         println(err.Error())
+      }
+   }(conn)
+   
+   reader := bufio.NewReader(os.Stdin)
+   //循环发送信息
+   for {
+      //读取用户输入以\n结尾
+      msg, err := reader.ReadString('\n')
+      if err != nil {
+         println(err.Error())
+      }
+
+      //退出命令
+      if msg == "exit" {
+         println("退出成功")
+         break
+      }
+
+      //发送输入的信息给服务端
+      n, err := conn.Write([]byte(msg))
+      if err != nil {
+         println("出错啦~", err.Error())
+      }
+      fmt.Printf("[发送了%v个字节]\n", n)
+   }
+}
+```

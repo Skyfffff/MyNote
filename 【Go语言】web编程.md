@@ -1,128 +1,8 @@
-# Go网络编程
-
-## 简单TCP聊天实现
-
-#### 服务端
-
-```go
-package main
-
-import (
-	"fmt"
-	"net"
-)
-
-func process(conn net.Conn) {
-	//延迟关闭conn
-	defer func(conn net.Conn) {
-		err := conn.Close()
-		if err != nil {
-			println(err.Error())
-		}
-	}(conn)
-
-	//循环接收客户端消息
-	for {
-		buf := make([]byte, 1024)
-		//读取客户端消息，如没有则阻塞等待
-		n, err := conn.Read(buf)
-		//客户端下线
-		if err != nil {
-			fmt.Printf("%v 客户端下线\n", conn.RemoteAddr().String())
-			return
-		}
-		//打印接受的信息
-		fmt.Printf("%v 发送:%v", conn.RemoteAddr().String(), string(buf[:n]))
-	}
-}
-
-func main() {
-	//开启tcp监听本地8888端口
-	listen, err := net.Listen("tcp", "localhost:8888")
-	println("开始监听~")
-	if err != nil {
-		println(err.Error())
-		return
-	}
-
-	//延迟关闭listen
-	defer func(listen net.Listener) {
-		err := listen.Close()
-		if err != nil {
-			println("出错啦")
-		}
-	}(listen)
-
-	//等待客户端连接
-	for {
-		//println("等待客户端连接")
-		conn, err := listen.Accept()
-		if err != nil {
-			println(err.Error())
-		}
-		fmt.Printf("%v上线 \n", conn.RemoteAddr().String())
-		//开启消息接收协程
-		go process(conn)
-	}
-}
-
-```
-
-#### 客户端
-
-```go
-package main
-
-import (
-   "bufio"
-   "fmt"
-   "net"
-   "os"
-)
-
-func main() {
-   //连接服务端
-   conn, err := net.Dial("tcp", "localhost:8888")
-   if err != nil {
-      println("出错啦", err.Error())
-   }
-
-   //延迟关闭conn
-   defer func(conn net.Conn) {
-      err := conn.Close()
-      if err != nil {
-         println(err.Error())
-      }
-   }(conn)
-   
-   reader := bufio.NewReader(os.Stdin)
-   //循环发送信息
-   for {
-      //读取用户输入以\n结尾
-      msg, err := reader.ReadString('\n')
-      if err != nil {
-         println(err.Error())
-      }
-
-      //退出命令
-      if msg == "exit" {
-         println("退出成功")
-         break
-      }
-
-      //发送输入的信息给服务端
-      n, err := conn.Write([]byte(msg))
-      if err != nil {
-         println("出错啦~", err.Error())
-      }
-      fmt.Printf("[发送了%v个字节]\n", n)
-   }
-}
-```
-
 # Gin框架
 
-## 简单请求接口
+## 路由
+
+### 基本路由
 
 ```go
 package main
@@ -154,9 +34,44 @@ func main() {
 }
 ```
 
-## 返回json
+### 路由分组
 
-> 传统方法
+```go
+package main
+
+import (
+   "github.com/gin-gonic/gin"
+   "net/http"
+)
+
+func main() {
+   r := gin.Default()
+   userGroup := r.Group("/user")
+   {
+      userGroup.GET("/login", login)
+      userGroup.GET("/loginout", loginout)
+   }
+
+   adminGroup := r.Group("/admin")
+   {
+      adminGroup.GET("/login", login)
+      adminGroup.GET("/loginout", loginout)
+   }
+   r.Run()
+}
+
+func login(c *gin.Context) {
+   c.String(http.StatusOK, "login")
+}
+
+func loginout(c *gin.Context) {
+   c.String(http.StatusOK, "loginout")
+}
+```
+
+## 返回数据
+
+### Json
 
 ```go
 package main
@@ -191,7 +106,7 @@ func main() {
 }
 ```
 
-> 结构体
+### 结构体
 
 ```go
 package main
@@ -234,7 +149,27 @@ func main() {
 }
 ```
 
-## Html模板渲染
+### 重定向
+
+```go
+package main
+
+import (
+   "net/http"
+
+   "github.com/gin-gonic/gin"
+)
+
+func main() {
+   r := gin.Default()
+   r.GET("/index", func(c *gin.Context) {
+      c.Redirect(http.StatusMovedPermanently, "http://skyblog.top")
+   })
+   r.Run()
+}
+```
+
+## Gin渲染
 
 ### 入门案例
 
@@ -528,3 +463,510 @@ xxx
 ### 模板的嵌套
 
 xxx
+
+## 静态资源释放
+
+xxx
+
+## 获取前端数据
+
+### Get和Post参数获取
+
+> 前端
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>hello world</title>
+    </head>
+    <body>
+        <form action="/post" method="post">
+            username: <input type="text" name="username"/> <br>
+            password: <input type="text" name="password"/> <br>
+            <button type="submit">登录</button>
+        </form>
+        <p>msg:{{.msg}}</p>
+        <p>Love:{{.love}}</p>
+        <p>username:{{.username}}</p>
+        <p>password:{{.password}}</p>
+    </body>
+</html>
+```
+
+> 后端
+
+```go
+package main
+
+import (
+	"fmt"
+	"github.com/gin-gonic/gin"
+	"net/http"
+)
+
+func main() {
+	r := gin.Default()
+
+	r.LoadHTMLGlob("./templates/*")
+
+	r.GET("/get", func(c *gin.Context) {
+		msg := c.Query("msg")
+		love := c.DefaultQuery("love", "Yes")
+		c.HTML(http.StatusOK, "hello.html", gin.H{
+			"msg":  msg,
+			"love": love,
+		})
+	})
+
+	r.POST("/post", func(c *gin.Context) {
+		username := c.PostForm("username")
+		password := c.PostForm("password")
+		
+		c.HTML(http.StatusOK, "hello.html", gin.H{
+			"username": username,
+			"password": password,
+		})
+	})
+
+	err := r.Run()
+	if err != nil {
+		fmt.Printf("%v", err)
+	}
+}
+```
+
+### 参数绑定
+
+```go
+package main
+
+import (
+   "fmt"
+   "github.com/gin-gonic/gin"
+   "net/http"
+)
+
+type Userinfo struct {
+   //json:格式输出  form:格式输入
+   Username string `json:"username" form:"username"`
+   Password string `json:"password" form:"password"`
+}
+
+func main() {
+   r := gin.Default()
+   r.GET("/user", func(c *gin.Context) {
+      var u Userinfo
+      err := c.ShouldBind(&u)
+      if err != nil {
+         c.JSON(http.StatusBadGateway, gin.H{
+            "error": err.Error(),
+         })
+      } else {
+         c.JSON(http.StatusOK, u)
+      }
+      fmt.Printf("%#v\n", &u)
+   })
+   r.Run()
+}
+```
+
+## 文件上传
+
+### 上传单个文件
+
+> 前端代码
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Document</title>
+    </head>
+    <body>
+        <form action="/upload" method="post" enctype="multipart/form-data">
+            上传文件:<input type="file" name="f1">
+            <input type="submit" value="提交">
+        </form>
+    </body>
+</html>
+```
+
+> 后端
+
+```go
+package main
+
+import (
+   "github.com/gin-gonic/gin"
+   "net/http"
+)
+
+func main() {
+   r := gin.Default()
+   r.LoadHTMLGlob("./templates/*")
+   
+   r.GET("/", func(c *gin.Context) {
+      c.HTML(http.StatusOK, "hello.html", nil)
+   })
+
+   r.POST("/upload", func(c *gin.Context) {
+      file, err := c.FormFile("f1")
+      if err != nil {
+         c.String(http.StatusInternalServerError, "上传出错")
+      }
+      //保存在指定目录
+      c.SaveUploadedFile(file, file.Filename)
+      c.JSON(http.StatusOK, gin.H{
+         "msg": file.Filename,
+      })
+   })
+
+   r.Run()
+}
+```
+
+### 上传多个文件
+
+> 前端
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Document</title>
+    </head>
+    <body>
+        <form action="upload" method="post" enctype="multipart/form-data">
+            上传文件:<input type="file" name="files" multiple>
+            <input type="submit" value="提交">
+        </form>
+    </body>
+</html>
+```
+
+> 后端
+
+```go
+package main
+
+import (
+   "github.com/gin-gonic/gin"
+   "net/http"
+)
+
+func main() {
+   r := gin.Default()
+   r.LoadHTMLGlob("./templates/*")
+   r.GET("/", func(c *gin.Context) {
+      c.HTML(http.StatusOK, "hello.html", nil)
+   })
+	//设置最大文件大小 20mb
+   r.MaxMultipartMemory = 10 << 20
+
+   r.POST("/upload", func(c *gin.Context) {
+      //获取多部分表单数据
+      form, err := c.MultipartForm()
+      if err != nil {
+         c.String(http.StatusInternalServerError, "上传出错啦")
+      }
+		//获取所有文件
+      files := form.File["files"]
+		//逐个保存
+      for _, file := range files {
+         if err := c.SaveUploadedFile(file, file.Filename); err != nil {
+            c.String(http.StatusInternalServerError, "保存出错啦")
+            return
+         }
+      }
+      c.String(http.StatusOK, "保存成功")                                                                                  
+   })                                                                                                       
+
+   r.Run()
+}
+```
+
+## 会话操作
+
+### Cookie
+
+```go
+package main
+
+import (
+   "fmt"
+   "github.com/gin-gonic/gin"
+   "net/http"
+)
+
+func main() {
+   r := gin.Default()
+   
+   r.GET("/cookie", func(c *gin.Context) {
+      //获取客户端的cookie 没找到就err
+      cookie, err := c.Cookie("name")
+
+      if err != nil {
+         fmt.Printf("%v", err)
+          //  maxAge int, 单位为秒
+         // path,cookie所在目录
+         // domain string,域名
+         //   secure 是否智能通过https访问
+         // httpOnly bool  是否允许别人通过js获取自己的cookie
+         c.SetCookie("name", "nil", 600, "/", "localhost", false, true)
+      }
+
+      c.String(http.StatusOK, cookie)
+   })
+   
+   //设置cookie
+   r.GET("/setcookie", func(c *gin.Context) {
+      name := c.Query("name")
+      //设置cookie
+       //  maxAge int, 单位为秒
+         // path,cookie所在目录
+         // domain string,域名
+         //   secure 是否智能通过https访问
+         // httpOnly bool  是否允许别人通过js获取自己的cookie
+      c.SetCookie("name", name, 600, "/", "localhost", false, true)
+      c.String(http.StatusOK, name)
+   })
+   
+   r.Run()
+}
+```
+
+## 中间件
+
+xxx
+
+# Go操作Mysql
+
+## Mysql事物
+
+```go
+package main
+
+import (
+   "fmt"
+   _ "github.com/go-sql-driver/mysql"
+   "github.com/jmoiron/sqlx"
+)
+
+var Db *sqlx.DB
+
+func init() {
+   //连接mysql
+   database, err := sqlx.Open("mysql", "root:123456@tcp(127.0.0.1:3306)/db1")
+   if err != nil {
+      fmt.Println("open mysql failed,", err)
+      return
+   }
+   Db = database
+}
+
+func main() {
+   //开启事物
+   conn, err2 := Db.Begin()
+   if err2 != nil {
+      fmt.Printf("%v", err2)
+      return
+   }
+
+   //sql语句
+   r, err := conn.Exec("insert into users(username, password)values(?,?)", "ShiWuTest", "ShiWuTest")
+   if err != nil {
+      fmt.Println("exec failed, ", err)
+      return
+   }
+
+   id, err := r.LastInsertId()
+   if err != nil {
+      fmt.Println("exec failed, ", err)
+      //回滚事物
+      conn.Rollback()
+      return
+   }
+
+   conn.Commit()
+   fmt.Println("insert succ:", id)
+}
+```
+
+## 基本操作
+
+### 增
+
+```go
+package main
+
+import (
+   "fmt"
+   _ "github.com/go-sql-driver/mysql"
+   "github.com/jmoiron/sqlx"
+)
+
+var Db *sqlx.DB
+
+func init() {
+   //连接mysql
+   database, err := sqlx.Open("mysql", "root:123456@tcp(127.0.0.1:3306)/db1")
+   if err != nil {
+      fmt.Println("open mysql failed,", err)
+      return
+   }
+   Db = database
+}
+
+func main() {
+   //sql语句
+   r, err := Db.Exec("insert into users(username, password)values(?,?)", "Skyfff", "123456")
+   if err != nil {
+      fmt.Println("exec failed, ", err)
+      return
+   }
+   
+   id, err := r.LastInsertId()
+   if err != nil {
+      fmt.Println("exec failed, ", err)
+      return
+   }
+
+   fmt.Println("insert succ:", id)
+}
+```
+
+### 删
+
+```go
+package main
+
+import (
+   "fmt"
+   _ "github.com/go-sql-driver/mysql"
+   "github.com/jmoiron/sqlx"
+)
+
+var Db *sqlx.DB
+
+func init() {
+   //连接mysql
+   database, err := sqlx.Open("mysql", "root:123456@tcp(127.0.0.1:3306)/db1")
+   if err != nil {
+      fmt.Println("open mysql failed,", err)
+      return
+   }
+   Db = database
+}
+
+func main() {
+   //sql语句
+   res, err := Db.Exec("delete from users where id = ?", 666)
+   if err != nil {
+      fmt.Printf("%v", err)
+      return
+   }
+
+   aff, err := res.RowsAffected()
+   if err != nil {
+      fmt.Printf("%v", err)
+      return
+   }
+
+   fmt.Printf("%v", aff)
+}
+```
+
+### 改
+
+```go
+package main
+
+import (
+   "fmt"
+   _ "github.com/go-sql-driver/mysql"
+   "github.com/jmoiron/sqlx"
+)
+
+var Db *sqlx.DB
+
+func init() {
+   //连接mysql
+   database, err := sqlx.Open("mysql", "root:123456@tcp(127.0.0.1:3306)/db1")
+   if err != nil {
+      fmt.Println("open mysql failed,", err)
+      return
+   }
+   Db = database
+}
+
+func main() {
+   //sql语句
+   res, err := Db.Exec("update users set username=? where id = ?", "skyUpdate", 4)
+   if err != nil {
+      fmt.Printf("%v", err)
+      return
+   }
+
+   aff, err := res.RowsAffected()
+   if err != nil {
+      fmt.Printf("%v", err)
+      return
+   }
+
+   fmt.Printf("%v", aff)
+}
+```
+
+### 查
+
+```go
+package main
+
+import (
+   "fmt"
+   _ "github.com/go-sql-driver/mysql"
+   "github.com/jmoiron/sqlx"
+)
+
+type Users struct {
+   Id       int64  `db:"id"`
+   Username string `db:"username"`
+   Password string `db:"password"`
+   Deleted  int    `db:"deleted"`
+   Version  int    `db:"version"`
+}
+
+var Db *sqlx.DB
+
+func init() {
+   //连接mysql
+   database, err := sqlx.Open("mysql", "root:123456@tcp(127.0.0.1:3306)/db1")
+   if err != nil {
+      fmt.Println("open mysql failed,", err)
+      return
+   }
+   Db = database
+}
+
+func main() {
+   //切片类型
+   var user []Users
+   //sql语句
+   err := Db.Select(&user, "select * from users")
+   if err != nil {
+      fmt.Printf("%v", err)
+      return
+   }
+
+   fmt.Printf("%v", user)
+}
+```
+
