@@ -27,6 +27,7 @@ func main() {
       context.String(200, "post请求")
    })
     //开启8888端口
+    // Run("里面不指定端口号默认为8080") 
    err := r.Run(":8888")
    if err != nil {
       fmt.Printf("%v", err)
