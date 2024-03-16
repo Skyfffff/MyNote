@@ -16,7 +16,7 @@ Options:
     target(s)
 
     -u URL, --url=URL   Target URL (e.g. "http://www.site.com/vuln.php?id=1")
-    -g GOOGLEDORK       Process Google dork results as target URLs
+    -g GOOGLEDORK       将谷歌傻瓜结果作为目标网址进行处理
 
  Request:
     These options can be used to specify how to connect to the target URL
@@ -39,6 +39,11 @@ Options:
     These options can be used to customize the detection phase
 
     --level=LEVEL       Level of tests to perform (1-5, default 1)
+    一共有5个等级（1-5） 不加 level 时，默认是1
+    5级包含的payload最多，会自动破解出cookie、XFF等头部注入，相对应他的速度也比较慢。
+    level=2 http cookie会测试
+    level=3 http user-agent/referer头会测试
+    
     --risk=RISK         Risk of tests to perform (1-3, default 1)
 
  Techniques:
