@@ -8,13 +8,13 @@
 
 #### 性别：男🙆‍♂️
 
-#### 兴趣爱好：乒乓、羽毛、运动、计算机、音乐、电影、聊天(吹牛)
+#### 兴趣爱好：技术、运动、聊天(吹牛)
 
-#### 正在学习：🟠网络安全
+#### 正在学习：🟠苦逼开发
 
-#### 擅长语言：Java、C
+#### 擅长语言：Java、Golang、Python
 
-#### 拥有的技术栈：SpringBoot、Mybatis-P、Mysql、Golang、JS、信息收集
+#### 拥有的技术栈：SpringBoot、SSM、Mysql、Golang、JS、网络安全
 
 #### 博客：http://skyblog.top/
 
