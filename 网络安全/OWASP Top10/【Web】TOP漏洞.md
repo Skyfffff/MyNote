@@ -1,6 +1,26 @@
 # TOP漏洞
 
+![Mapping of the relationship between the Top 10 2017 and the new Top 10 2021](PictureFile/【Web】TOP漏洞.assets/image1.png)
+
 ## Sql注入
+
+### 选用注释问题
+
+（GET提交方式）：
+
+　　 -- （后面有空格）
+
+　　 %23
+
+　　payload结尾单引号闭合
+
+（POST提交方式）：
+
+　　 -- （后面有空格）
+
+　　 #
+
+　　 payload结尾单引号闭合
 
 ### 普通注入型
 
@@ -127,7 +147,7 @@ select * from address_book where sex=1 and updatexml(222,concat(0x7e,version()),
 # 0x7e就是代表‘~’，concat负责连接~和version。
 ```
 
-得到：
+得到：                                                                                                    
 
 ```sql
 ERROR 1105 (HY000): XPATH syntax error: '~5.7.24'
@@ -1548,3 +1568,12 @@ __wakeup函数绕过
 NSSCTF{dea9d35e-edbd-48ee-8daf-7227d0b4fb08}
 ```
 
+## 越权漏洞
+
+**横向越权**：攻击者尝试访问与他拥有相同权限的用户的资源
+
+示例：购物系统中A用户可以可以查询到B用户的订单信息。
+
+**纵向越权**：攻击者可以使用低权限的账户去使用高权限账户的功能。
+
+示例：原本没有删除功能的用户A可以使用管理员用户的删除功能删除了管理员用户中的数据。

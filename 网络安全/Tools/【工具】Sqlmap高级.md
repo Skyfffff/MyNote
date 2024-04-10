@@ -39,12 +39,15 @@ Options:
     These options can be used to customize the detection phase
 
     --level=LEVEL       Level of tests to perform (1-5, default 1)
-    一共有5个等级（1-5） 不加 level 时，默认是1
-    5级包含的payload最多，会自动破解出cookie、XFF等头部注入，相对应他的速度也比较慢。
-    level=2 http cookie会测试
-    level=3 http user-agent/referer头会测试
+    level1：默认的 level 等级，会测试 GET 和 POST 请求中的参数。
+    level2：除了前面提到的，还会检查 cookie 里的数据。
+    level3：user-agent 和 referer 头部也纳入检测范围。
+    level4~5：会尝试各种 payloads 和边界条件，确保不放过任何潜在的注入点。
     
     --risk=RISK         Risk of tests to perform (1-3, default 1)
+    risk 1：安全第一。默认的风险等级，风险几乎为零。
+    risk2：除了默认的检测，还会尝试时间型盲注。
+    risk3：在风险等级 2 的基础上，再加上 OR 类型的布尔型盲注。这种方式在某些情况下可能会导致数据表的所有记录被更新，所以使用时需谨慎。
 
  Techniques:
     These options can be used to tweak testing of specific SQL injection

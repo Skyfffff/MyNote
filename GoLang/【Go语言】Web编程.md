@@ -70,6 +70,99 @@ func loginout(c *gin.Context) {
 }
 ```
 
+### 路由分组抽离
+
+目录结构                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
+
+```
+GoWeb
+  │  go.mod
+  │  go.sum
+  │  main.go
+  │
+  ├─routers
+  │      adminRouters.go
+  │      apiRouters.go
+
+```
+
+main.go
+
+```go
+func main() {
+   router := gin.Default()
+
+   routers.AdminRoutersInit(router)
+   routers.ApiRoutersInit(router)
+
+   router.Run(":8080")
+}
+```
+
+adminRouters.go
+
+```go
+package routers
+
+import (
+   "github.com/gin-gonic/gin"
+   "net/http"
+)
+
+func AdminRoutersInit(r *gin.Engine) {
+   defaultGroup := r.Group("/admin")
+   {
+      defaultGroup.GET("/login", login)
+      defaultGroup.GET("/add", addUser)
+      defaultGroup.GET("/delete", deleteUser)
+   }
+}
+
+func login(c *gin.Context) {
+   c.String(http.StatusOK, "登录成功")
+}
+
+func addUser(c *gin.Context) {
+   c.String(http.StatusOK, "成功添加用户")
+}
+
+func deleteUser(c *gin.Context) {
+   c.String(http.StatusOK, "成功删除用户")
+}
+```
+
+apiRouters.go
+
+```go
+package routers
+
+import (
+   "github.com/gin-gonic/gin"
+   "net/http"
+)
+
+func ApiRoutersInit(r *gin.Engine) {
+   defaultGroup := r.Group("/api")
+   {
+      defaultGroup.GET("/pay", pay)
+      defaultGroup.GET("/send", send)
+      defaultGroup.GET("/get", get)
+   }
+}
+
+func pay(c *gin.Context) {
+   c.String(http.StatusOK, "我是支付接口")
+}
+
+func send(c *gin.Context) {
+   c.String(http.StatusOK, "我是发送接口")
+}
+
+func get(c *gin.Context) {
+   c.String(http.StatusOK, "我是获取接口")
+}
+```
+
 ## 返回数据
 
 ### Json
@@ -744,9 +837,7 @@ func main() {
 }
 ```
 
-## 中间件
 
-xxx
 
 # Go操作Mysql
 
